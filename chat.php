@@ -31,11 +31,10 @@
             </div>
 
             <div class="flex items-center justify-center bg-white px-8 py-8 border-t border-gray-100">
-                <div class="w-full max-w-2xl shadow-lg border border-gray-100 rounded-full px-4 py-2">
-                    <form id="chatForm" class="flex items-center gap-3">
-                        <input type="text" id="userInput" name="message" placeholder="Write user message..." class="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-500" autocomplete="off">
-                        
-                        <button type="submit" class="flex items-center justify-center rounded-full p-2 hover:bg-blue-50 transition-colors cursor-pointer">
+                <div class="w-full max-w-2xl shadow-lg border border-gray-100 rounded-3xl px-4 py-2">
+                    <form id="chatForm" class="flex items-end gap-3">
+                        <textarea id="userInput" name="message" placeholder="Share your thoughts..." class="flex-1 bg-transparent outline-none text-md text-gray-700 placeholder-gray-400 resize-none max-h-15 overflow-y-auto" rows="1" maxlength="2000" autocomplete="off"></textarea>
+                        <button type="submit" class="flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0 text-gray-400 hover:text-gray-600">
                             <img src="./Assets/send.svg" alt="Send" class="w-5 h-5">
                         </button>
                     </form>
@@ -50,9 +49,25 @@
         const userInput = document.getElementById('userInput');
         const welcomeSection = document.getElementById('welcomeSection');
 
+        // Auto-resize textarea height based on content
+        function autoResizeTextarea() {
+            userInput.style.height = 'auto';
+            userInput.style.height = Math.min(userInput.scrollHeight, 128) + 'px'; // 128px = max-h-32 (32 * 4)
+        }
+
+        userInput.addEventListener('input', autoResizeTextarea);
+        userInput.addEventListener('keydown', (e) => {
+            // Allow Enter to submit, Shift+Enter for new line
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
         // Function for example buttons
         window.sendExample = function(text) {
             userInput.value = text;
+            autoResizeTextarea();
             chatForm.dispatchEvent(new Event('submit'));
         };
 
@@ -85,6 +100,7 @@
 
             appendMessage('user', message);
             userInput.value = '';
+            autoResizeTextarea();
 
             // Show a "typing" indicator or placeholder
             const typingId = 'typing-' + Date.now();
