@@ -2,7 +2,7 @@
 
 // Configuration
 define('OLLAMA_URL', 'http://localhost:11434/api/generate');
-define('MODEL_NAME', 'Halbert');
+define('MODEL_NAME', 'Ennoia');
 define('MAX_TOKENS', 256);
 define('TEMPERATURE', 0.7);
 

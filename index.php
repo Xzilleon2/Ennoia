@@ -9,16 +9,21 @@
     <!-- Navigation Bar -->
     <nav class="fixed top-0 w-full backdrop-blur z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-[#3369FF]">Halbert AI</h1>
+            <h1 class="text-2xl font-bold text-white">Ennoia</h1>
             <div class="flex gap-8 items-center">
-                <a href="#" class="text-white hover:text-[#3369FF]">About Us</a>
-                <a href="#" class="text-white hover:text-[#3369FF]">Experience</a>
-                <a href="#" class="text-white hover:text-[#3369FF]">Training</a>
-                <a href="#" class="text-white hover:text-[#3369FF]">Contact</a>
+                <a href="#" class="text-white hover:text-[#2F4D55]">About Us</a>
+                <a href="#" class="text-white hover:text-[#2F4D55]">Experience</a>
+                <a href="#" class="text-white hover:text-[#2F4D55]">Training</a>
+                <a href="#" class="text-white hover:text-[#2F4D55]">Contact</a>
             </div>
-            <a href="#" class="text-gray-600 hover:text-[#3369FF]">
-                <img src="./Assets/Imgs/chat_bubble.svg" alt="Chat" class="w-6 h-6">
-            </a>
+            <div class="flex gap-3 items-center">
+                <button type="button" onclick="window.location.href='sign_in.php'" class="hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors cursor-pointer">
+                    Sign in
+                </button>
+                <button type="button" onclick="window.location.href='sign_up.php'" class="bg-[#395B64] hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors  cursor-pointer">
+                    Sign up
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -43,7 +48,7 @@
             <div class="flex items-center justify-center w-full max-w-md">
                 <div class="relative w-full bg-white/20 backdrop-blur rounded-full px-6 py-3 flex items-center justify-between border border-white/30">
                     <input type="text" placeholder="Send a Message" class="bg-transparent text-white placeholder-white/70 outline-none flex-1 text-sm">
-                    <a href="splash.php?redirect=chat.php" class="bg-[#3369FF] hover:bg-[#1a56d1] transition-colors rounded-full p-2 flex items-center justify-center ml-2">
+                    <a href="splash.php?redirect=chat.php" class="bg-[#395B64] hover:bg-[#2F4D55] transition-colors rounded-full p-2 flex items-center justify-center ml-2">
                         <img src="./Assets/Imgs/Send.svg" alt="Send" class="w-5 h-5">
                     </a>
                 </div>
@@ -103,7 +108,7 @@
 
                 <!-- Right Content -->
                 <div class="flex flex-col gap-1 h-full">
-                    <p class="text-[#11B8E5] font-semibold text-sm mb-3">EXPERIENCES</p>
+                    <p class="text-[#395B64] font-semibold text-sm mb-3">EXPERIENCES</p>
                     <h2 class="text-4xl lg:text-5xl font-bold text-black mb-6">We Provide You The<br>Best Experience</h2>
                     <p class="text-gray-600 leading-relaxed text-lg">
                         You don't have to worry about the result because of all of these interns are made by people who are professionals in their fields with an elegant and luxurious style and with premium quality experience.
@@ -119,7 +124,7 @@
             <div class="flex flex-col lg:flex-row gap-12 items-center">
                 <!-- Left Content -->
                 <div class="flex-1">
-                    <p class="text-[#3369FF] font-semibold text-sm mb-3">MATERIALS</p>
+                    <p class="text-[#395B64] font-semibold text-sm mb-3">MATERIALS</p>
                     <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Carefully Crafted<br>Training For Optimal<br>Performance</h2>
                     <p class="text-gray-600">
                         Because we're very serious about developing hardware for our measurement using a very meticulous and famous night but at a relatively low price
@@ -150,7 +155,7 @@
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
             <div class="text-center mb-20">
-                <p class="text-[#3369FF] font-semibold text-sm mb-3 uppercase tracking-wide">TESTIMONIALS</p>
+                <p class="text-[#395B64] font-semibold text-sm mb-3 uppercase tracking-wide">TESTIMONIALS</p>
                 <h2 class="text-4xl lg:text-5xl font-bold text-gray-900">Our Client Reviews</h2>
             </div>
 
@@ -250,7 +255,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <!-- Brand -->
                 <div>
-                    <h3 class="text-lg font-bold text-[#3369FF] mb-4">Halbert AI</h3>
+                    <h3 class="text-lg font-bold text-[#395B64] mb-4">Ennoia</h3>
                     <p class="text-sm text-gray-600">
                         The advantages of being a workspace with us is to have a private and comfortable service and all around good facilities.
                     </p>
@@ -260,9 +265,9 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-4">Services</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="#" class="hover:text-[#3369FF]">Email Marketing</a></li>
-                        <li><a href="#" class="hover:text-[#3369FF]">Campaigns</a></li>
-                        <li><a href="#" class="hover:text-[#3369FF]">Branding</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Email Marketing</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Campaigns</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Branding</a></li>
                     </ul>
                 </div>
 
@@ -270,9 +275,9 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-4">Features</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="#" class="hover:text-[#3369FF]">Bots</a></li>
-                        <li><a href="#" class="hover:text-[#3369FF]">Chats</a></li>
-                        <li><a href="#" class="hover:text-[#3369FF]">AI</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Bots</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Chats</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">AI</a></li>
                     </ul>
                 </div>
 
@@ -280,9 +285,9 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-4">Follow Us</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="#" class="hover:text-[#3369FF]">Facebook</a></li>
-                        <li><a href="#" class="hover:text-[#3369FF]">Twitter</a></li>
-                        <li><a href="#" class="hover:text-[#3369FF]">Instagram</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Facebook</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Twitter</a></li>
+                        <li><a href="#" class="hover:text-[#395B64]">Instagram</a></li>
                     </ul>
                 </div>
             </div>
@@ -290,8 +295,8 @@
             <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
                 <p>Copyright © 2025</p>
                 <div class="flex gap-8">
-                    <a href="#" class="hover:text-[#3369FF]">Terms & Conditions</a>
-                    <a href="#" class="hover:text-[#3369FF]">Privacy Policy</a>
+                    <a href="#" class="hover:text-[#395B64]">Terms & Conditions</a>
+                    <a href="#" class="hover:text-[#395B64]">Privacy Policy</a>
                 </div>
             </div>
         </div>
@@ -300,6 +305,8 @@
     <script>
         const nav = document.querySelector('nav');
         const heroSection = document.querySelector('section');
+        const logo = document.querySelector('nav h1');
+        const buttons = document.querySelectorAll('nav button');
         
         window.addEventListener('scroll', () => {
             const heroBottom = heroSection.offsetHeight;
@@ -309,19 +316,39 @@
                 nav.classList.remove('bg-transparent', 'backdrop-blur');
                 nav.classList.add('bg-white', 'shadow-lg');
                 
+                // Change logo color
+                logo.classList.remove('text-white');
+                logo.classList.add('text-gray-900');
+                
                 // Change link colors
                 document.querySelectorAll('nav a').forEach(link => {
                     link.classList.remove('text-white', 'hover:text-[#3369FF]', 'text-gray-600');
                     link.classList.add('text-gray-900', 'hover:text-[#3369FF]');
+                });
+                
+                // Change button text colors
+                buttons.forEach(button => {
+                    button.classList.remove('text-white');
+                    button.classList.add('text-gray-900');
                 });
             } else {
                 // On hero section - white text
                 nav.classList.add('bg-transparent', 'backdrop-blur');
                 nav.classList.remove('bg-white');
                 
+                // Change logo color back to white
+                logo.classList.remove('text-gray-900');
+                logo.classList.add('text-white');
+                
                 document.querySelectorAll('nav a').forEach(link => {
                     link.classList.remove('text-gray-900');
                     link.classList.add('text-white', 'hover:text-[#3369FF]');
+                });
+                
+                // Change button text colors back to white
+                buttons.forEach(button => {
+                    button.classList.remove('text-gray-900');
+                    button.classList.add('text-white');
                 });
             }
         });
