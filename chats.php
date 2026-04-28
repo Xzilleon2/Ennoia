@@ -27,7 +27,7 @@
             <nav class="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
                 <!-- Analysis -->
                 <div>
-                    <a href="#" class="flex items-center gap-3 text-gray-700 hover:text-[#3369FF] transition-colors py-2 px-3 rounded-lg hover:bg-gray-50">
+                    <a href="./analysis.php" class="flex items-center gap-3 text-gray-700 hover:text-[#3369FF] transition-colors py-2 px-3 rounded-lg hover:bg-gray-50">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
@@ -132,159 +132,243 @@
             </div>
 
         <script>
-            const chatForm = document.getElementById('chatForm');
-            const chatMessages = document.getElementById('chatMessages');
-            const userInput = document.getElementById('userInput');
+        const chatForm = document.getElementById('chatForm');
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = chatForm.querySelector('button');
+
+        let isGenerating = false;
 
 
-            /* =========================
-            MESSAGE APPENDER
-            ========================= */
-            function appendMessage(sender, text) {
-                const container = document.createElement('div');
+        /* =========================
+        MESSAGE APPENDER
+        ========================= */
+        function appendMessage(sender, text) {
 
-                container.className = `flex ${
-                    sender === 'user'
-                        ? 'justify-end'
-                        : 'justify-start'
-                }`;
+            const container = document.createElement('div');
 
-                const bubble = document.createElement('div');
+            container.className = `flex ${
+                sender === 'user'
+                    ? 'justify-end'
+                    : 'justify-start'
+            }`;
 
-                bubble.className =
-                    sender === 'user'
-                        ? 'max-w-md bg-[#395B64] text-white px-4 py-3 rounded-lg'
-                        : 'max-w-md bg-[#A6CFD5] text-gray-900 px-4 py-3 rounded-lg';
+            const bubble = document.createElement('div');
 
-                bubble.innerHTML = `<p class="text-sm">${text}</p>`;
+            bubble.className =
+                sender === 'user'
+                    ? 'max-w-md bg-[#395B64] text-white px-4 py-3 rounded-lg'
+                    : 'max-w-md bg-[#A6CFD5] text-gray-900 px-4 py-3 rounded-lg';
 
-                container.appendChild(bubble);
-                chatMessages.appendChild(container);
+            bubble.innerHTML = `<p class="text-sm">${text}</p>`;
 
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+            container.appendChild(bubble);
+            chatMessages.appendChild(container);
 
-                return container;
-            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            return container;
+        }
 
 
-            /* =========================
-            TYPING ANIMATION SYSTEM
-            ========================= */
-            function showTypingIndicator() {
+        /* =========================
+        LOCK / UNLOCK INPUT
+        ========================= */
+        function lockChat() {
+            isGenerating = true;
 
-                const typingBubble = appendMessage(
-                    'bot',
-                    '<span class="typingDots">...</span>'
-                );
+            userInput.disabled = true;
+            sendButton.disabled = true;
 
-                let dots = 0;
+            userInput.placeholder = "Ennoia is responding...";
 
-                const interval = setInterval(() => {
-                    dots = (dots + 1) % 4;
+            sendButton.classList.add(
+                'opacity-50',
+                'cursor-not-allowed'
+            );
+        }
 
-                    const indicator = typingBubble.querySelector('.typingDots');
+        function unlockChat() {
+            isGenerating = false;
 
-                    if (indicator) {
-                        indicator.textContent = '.'.repeat(dots || 3);
-                    }
+            userInput.disabled = false;
+            sendButton.disabled = false;
 
-                }, 500);
+            userInput.placeholder = "Share your thoughts...";
 
-                return {
-                    stop() {
-                        clearInterval(interval);
+            sendButton.classList.remove(
+                'opacity-50',
+                'cursor-not-allowed'
+            );
+
+            userInput.focus();
+        }
+
+
+        /* =========================
+        TYPING ANIMATION
+        ========================= */
+        function showTypingIndicator() {
+
+            const typingBubble = appendMessage(
+                'bot',
+                '<span class="typingDots">...</span>'
+            );
+
+            let dots = 0;
+
+            const interval = setInterval(() => {
+
+                dots = (dots + 1) % 4;
+
+                const indicator =
+                    typingBubble.querySelector('.typingDots');
+
+                if (indicator) {
+                    indicator.textContent =
+                        '.'.repeat(dots || 3);
+                }
+
+            }, 500);
+
+            return {
+                stop() {
+                    clearInterval(interval);
+
+                    if (typingBubble.parentNode) {
                         typingBubble.remove();
                     }
-                };
-            }
+                }
+            };
+        }
 
 
-            /* =========================
-            INTRO MESSAGE ON LOAD
-            ========================= */
-            async function sendIntroduction() {
+        /* =========================
+        INTRO MESSAGE ON LOAD
+        ========================= */
+        async function sendIntroduction() {
 
-                const introMessage =
-                    "Please introduce yourself briefly and let the user know how you can help them. Do it in a short paragraph.";
+            lockChat();
 
-                const typing = showTypingIndicator();
+            const introMessage =
+                "Please introduce yourself briefly and let the user know how you can help them. Do it in a short paragraph.";
 
-                try {
-                    const response = await fetch('/Halbert/API/chat.php', {
+            const typing = showTypingIndicator();
+
+            try {
+
+                const response = await fetch(
+                    '/Halbert/API/chat.php',
+                    {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type':
+                                'application/json'
                         },
                         body: JSON.stringify({
                             text: introMessage
                         })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
+                );
 
-                    const data = await response.json();
-
-                    typing.stop();
-
-                    appendMessage(
-                        'bot',
-                        data.response || "Hello! I'm here to help you."
-                    );
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    typing.stop();
-
-                    appendMessage(
-                        'bot',
-                        "Hello! I'm here to help you today."
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error ${response.status}`
                     );
                 }
+
+                const data = await response.json();
+
+                typing.stop();
+
+                appendMessage(
+                    'bot',
+                    data.response ||
+                    "Hello! I'm here to help you."
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                typing.stop();
+
+                appendMessage(
+                    'bot',
+                    "Hello! I'm here to help you today."
+                );
+
+            } finally {
+                unlockChat();
             }
+        }
 
 
-            /* =========================
-            SEND MESSAGE HANDLER
-            ========================= */
-            chatForm.addEventListener('submit', async (e) => {
+        /* =========================
+        SEND MESSAGE HANDLER
+        ========================= */
+        chatForm.addEventListener(
+            'submit',
+            async function(e) {
 
                 e.preventDefault();
 
-                const message = userInput.value.trim();
+                /* Prevent sending while bot is generating */
+                if (isGenerating) {
+                    return;
+                }
+
+                const message =
+                    userInput.value.trim();
+
                 if (!message) return;
 
-                appendMessage('user', message);
+                lockChat();
+
+                appendMessage(
+                    'user',
+                    message
+                );
+
                 userInput.value = '';
 
-                const typing = showTypingIndicator();
+                const typing =
+                    showTypingIndicator();
 
                 try {
-                    const response = await fetch('/Halbert/API/chat.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ text: message })
-                    });
+
+                    const response = await fetch(
+                        '/Halbert/API/chat.php',
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+                            body: JSON.stringify({
+                                text: message
+                            })
+                        }
+                    );
 
                     if (!response.ok) {
-                        throw new Error(`HTTP error: ${response.status}`);
+                        throw new Error(
+                            `HTTP error ${response.status}`
+                        );
                     }
 
-                    const data = await response.json();
+                    const data =
+                        await response.json();
 
                     typing.stop();
 
                     appendMessage(
                         'bot',
-                        data.response || "No response from AI."
+                        data.response ||
+                        'No response from AI.'
                     );
 
-                } catch (error) {
+                } catch(error) {
 
                     console.error(error);
 
@@ -292,57 +376,101 @@
 
                     appendMessage(
                         'bot',
-                        "Error connecting to AI service. Make sure the server is running."
+                        'Error connecting to AI service. Make sure the server is running.'
                     );
-                }
-            });
 
+                } finally {
 
-            /* =========================
-            TITLE EDIT FUNCTION
-            ========================= */
-            function editTitle() {
+                    unlockChat();
 
-                const titleElement = document.getElementById('chatTitle');
-                const currentTitle = titleElement.textContent;
-
-                const input = document.createElement('input');
-
-                input.type = 'text';
-                input.value = currentTitle;
-
-                input.className =
-                    'text-2xl font-bold text-gray-900 border-2 border-[#3369FF] rounded px-2 py-1 focus:outline-none';
-
-                titleElement.replaceWith(input);
-
-                input.focus();
-                input.select();
-
-                function saveTitle() {
-
-                    const newTitle = input.value.trim() || currentTitle;
-
-                    const newTitleElement = document.createElement('h2');
-
-                    newTitleElement.id = 'chatTitle';
-                    newTitleElement.className =
-                        'text-2xl font-bold text-gray-900 cursor-pointer hover:text-[#3369FF] transition-colors';
-
-                    newTitleElement.textContent = newTitle;
-                    newTitleElement.onclick = editTitle;
-
-                    input.replaceWith(newTitleElement);
                 }
 
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') saveTitle();
-                });
+            }
+        );
 
-                input.addEventListener('blur', saveTitle);
+
+        /* =========================
+        TITLE EDIT FUNCTION
+        ========================= */
+        function editTitle() {
+
+            const titleElement =
+                document.getElementById(
+                    'chatTitle'
+                );
+
+            const currentTitle =
+                titleElement.textContent;
+
+            const input =
+                document.createElement(
+                    'input'
+                );
+
+            input.type = 'text';
+            input.value = currentTitle;
+
+            input.className =
+                'text-2xl font-bold text-gray-900 border-2 border-[#3369FF] rounded px-2 py-1 focus:outline-none';
+
+            titleElement.replaceWith(
+                input
+            );
+
+            input.focus();
+            input.select();
+
+            function saveTitle() {
+
+                const newTitle =
+                    input.value.trim() ||
+                    currentTitle;
+
+                const newTitleElement =
+                    document.createElement(
+                        'h2'
+                    );
+
+                newTitleElement.id =
+                    'chatTitle';
+
+                newTitleElement.className =
+                    'text-2xl font-bold text-gray-900 cursor-pointer hover:text-[#3369FF] transition-colors';
+
+                newTitleElement.textContent =
+                    newTitle;
+
+                newTitleElement.onclick =
+                    editTitle;
+
+                input.replaceWith(
+                    newTitleElement
+                );
             }
 
-            window.addEventListener('load', sendIntroduction);
+            input.addEventListener(
+                'keypress',
+                function(e){
+                    if(e.key === 'Enter'){
+                        saveTitle();
+                    }
+                }
+            );
+
+            input.addEventListener(
+                'blur',
+                saveTitle
+            );
+        }
+
+
+        /* =========================
+        LOAD INTRO
+        ========================= */
+        window.addEventListener(
+            'load',
+            sendIntroduction
+        );
         </script>
         </div>
     </div>

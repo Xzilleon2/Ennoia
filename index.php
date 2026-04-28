@@ -48,7 +48,7 @@
             <div class="flex items-center justify-center w-full max-w-md">
                 <div class="relative w-full bg-white/20 backdrop-blur rounded-full px-6 py-3 flex items-center justify-between border border-white/30">
                     <input type="text" placeholder="Send a Message" class="bg-transparent text-white placeholder-white/70 outline-none flex-1 text-sm">
-                    <a href="splash.php?redirect=chat.php" class="bg-[#395B64] hover:bg-[#2F4D55] transition-colors rounded-full p-2 flex items-center justify-center ml-2">
+                    <a href="./chats.php" class="bg-[#395B64] hover:bg-[#2F4D55] transition-colors rounded-full p-2 flex items-center justify-center ml-2">
                         <img src="./Assets/Imgs/Send.svg" alt="Send" class="w-5 h-5">
                     </a>
                 </div>
