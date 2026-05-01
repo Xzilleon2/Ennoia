@@ -258,7 +258,7 @@
             try {
 
                 const response = await fetch(
-                    '/Halbert/API/chat.php',
+                    './API/chat.php',
                     {
                         method: 'POST',
                         headers: {
@@ -338,7 +338,7 @@
                 try {
 
                     const response = await fetch(
-                        '/Halbert/API/chat.php',
+                        './API/chat.php',
                         {
                             method: 'POST',
                             headers: {
