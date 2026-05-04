@@ -12,11 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signupBtn'])) {
     $usersCntrl = new UsersCntrl($username, $password, $passwordRep);
 
     if ($usersCntrl->Register($message)) {
-        header("Location: ../sign_in.php");
+        $redirect = "../sign_in.php";
+
+        include_once __DIR__ . "/../Includes/loading.php";
         exit();
     } else {
         $_SESSION['message_log'] = $message;
-        header("Location: ../sign_up.php");
+        $redirect = "../sign_up.php";
+        
+        include_once __DIR__ . "/../Includes/loading.php";
         exit();
     }
 

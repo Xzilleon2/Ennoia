@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . '/../Classes/Dbh.class.php';
-include __DIR__ . '/../Classes/UsersCntrl.class.php';
+include_once __DIR__ . '/../Classes/UsersCntrl.class.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signinBtn'])) {
 
@@ -12,11 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signinBtn'])) {
 
 
     if ($usersCntrl->Login($username, $password, $message)) {
-        header("Location: ../index.php");
+        $redirect = "../index.php";
+
+        include_once __DIR__ . "/../Includes/loading.php";
         exit();
     } else {
         $_SESSION['message_log'] = $message;
-        header("Location: ../sign_in.php");
+        $redirect = "../sign_in.php";
+        
+        include_once __DIR__ . "/../Includes/loading.php";
         exit();
     }
 
