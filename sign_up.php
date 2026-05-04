@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php 
@@ -23,31 +24,36 @@
             
             <!-- Register Form -->
             <div class="w-full max-w-md">
-                <div class="text-center mb-8">
+                <div class="flex flex-col text-center mb-8">
+                    <?php if (isset($_SESSION['message_log'])): ?>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                            <span class="block sm:inline"><?php echo $_SESSION['message_log']; ?></span>
+                        </div>
+                    <?php unset($_SESSION['message_log']); endif; ?>
                     <h2 class="text-3xl font-bold text-gray-900">Register</h2>
                 </div>
                 
-                <form class="space-y-6">
+                <form class="space-y-6" method="POST" action="Process/Register.php">
                     <!-- Username Field -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                        <input type="text" placeholder="Axmi123" class="w-full px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent bg-white/80">
+                        <input type="text" name="username" placeholder="Axmi123" class="w-full px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent bg-white/80">
                     </div>
                     
                     <!-- Password Field -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input type="password" placeholder="amihail" class="w-full px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent bg-white/80">
+                        <input type="password" name="password" placeholder="amihail" class="w-full px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent bg-white/80">
                     </div>
                     
                     <!-- Confirm Password Field -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Confirm</label>
-                        <input type="password" placeholder="amihail" class="w-full px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent bg-white/80">
+                        <input type="password" name="passwordRep" placeholder="amihail" class="w-full px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent bg-white/80">
                     </div>
                     
                     <!-- Sign Up Button -->
-                    <button type="button" onclick="window.location.href='chats.php'" class="w-full bg-[#395B64] hover:bg-[#2F4D55] text-white font-semibold py-3 px-4 rounded-md transition-colors cursor-pointer">
+                    <button type="submit" name="signupBtn" class="w-full bg-[#395B64] hover:bg-[#2F4D55] text-white font-semibold py-3 px-4 rounded-md transition-colors cursor-pointer">
                         Sign up
                     </button>
                     
