@@ -1,11 +1,15 @@
 <?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php 
-    // included files
-    include __DIR__ . '/Includes/head.php';
-?>
+    <?php 
+        // included files
+        include __DIR__ . '/Includes/head.php';
+    ?>
 <body class="h-screen bg-white overflow-hidden">
+    <?php 
+        define('LOADING_OVERLAY', true);
+        include __DIR__ . '/Includes/loading.php';
+    ?>
     
     <!-- Main Container -->
     <div class="relative w-full h-full flex items-center justify-center" style="background-image: url('./Assets/Imgs/Sands.jpg'); background-size: cover; background-position: center;">
@@ -58,13 +62,21 @@
                     </button>
                     
                     <!-- Back Button -->
-                    <button type="button" onclick="window.location.href='index.php'" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 px-4 rounded-md border border-gray-300 transition-colors cursor-pointer">
+                    <button type="button" onclick="navigate('welcome.php', 'Please Wait…')" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 px-4 rounded-md border border-gray-300 transition-colors cursor-pointer">
                         Back
                     </button>
                 </form>
             </div>
         </div>
     </div>
+
+    <script> 
+        // Loading Modal Function
+        function navigate(url, msg) {
+            showLoadingModal(msg);
+            setTimeout(() => { window.location.href = url; }, 800);
+        }
+    </script>
 
 </body>
 </html>

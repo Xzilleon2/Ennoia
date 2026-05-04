@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php 
-    // included files
-    include __DIR__ . '/Includes/head.php';
-?>
+    <?php 
+        // included files
+        include __DIR__ . '/Includes/head.php';
+    ?>
 <body class="h-full bg-white">
+
+    <?php 
+        define('LOADING_OVERLAY', true);
+        include __DIR__ . '/Includes/loading.php';
+    ?>
     
     <!-- Navigation Bar -->
     <nav class="fixed top-0 w-full backdrop-blur z-50 shadow-lg">
@@ -17,10 +22,10 @@
                 <a href="#" class="text-white hover:text-[#2F4D55]">Contact</a>
             </div>
             <div class="flex gap-3 items-center">
-                <button type="button" onclick="window.location.href='sign_in.php'" class="hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors cursor-pointer">
+                <button type="button" onclick="navigate('sign_in.php', 'Signing in…')" class="hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors cursor-pointer">
                     Sign in
                 </button>
-                <button type="button" onclick="window.location.href='sign_up.php'" class="bg-[#395B64] hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors  cursor-pointer">
+                <button type="button" onclick="navigate('sign_up.php', 'Signing up…')" class="bg-[#395B64] hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors  cursor-pointer">
                     Sign up
                 </button>
             </div>
@@ -352,6 +357,12 @@
                 });
             }
         });
+
+        // Loading Modal Function
+        function navigate(url, msg) {
+            showLoadingModal(msg);
+            setTimeout(() => { window.location.href = url; }, 800);
+        }
     </script>
 
 </body>

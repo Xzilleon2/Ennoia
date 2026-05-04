@@ -13,13 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signinBtn'])) {
 
     if ($usersCntrl->Login($username, $password, $message)) {
         $redirect = "../index.php";
-
+        $message  = "Login successful! Redirecting…";
+        $delay    = 1500;
         include_once __DIR__ . "/../Includes/loading.php";
         exit();
     } else {
         $_SESSION['message_log'] = $message;
         $redirect = "../sign_in.php";
-        
+        $message  = "Redirecting…";
+        $delay    = 1500;
         include_once __DIR__ . "/../Includes/loading.php";
         exit();
     }
