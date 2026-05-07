@@ -7,76 +7,9 @@ include __DIR__ . '/Includes/head.php';
 
 <div class="flex h-screen">
 
-    <!-- SIDEBAR (same as chats.php) -->
-    <div class="w-64 bg-white border-r border-gray-200 flex flex-col">
-
-        <div class="p-6 border-b border-gray-200">
-            <h1 class="text-xl font-bold text-gray-900">Ennoia</h1>
-            <p class="text-xs text-gray-600">Express your self</p>
-        </div>
-
-        <div class="p-4">
-            <button
-                onclick="window.location.href='chats.php'"
-                class="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
-            >
-                <span>+</span>
-                <span>New Chat</span>
-            </button>
-        </div>
-
-        <nav class="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
-
-            <!-- Active Analysis -->
-            <a href="#"
-               class="flex items-center gap-3 bg-blue-50 text-[#3369FF] py-2 px-3 rounded-lg font-medium">
-
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                    </path>
-                </svg>
-                Analysis
-            </a>
-
-            <a href="./tasks.php"
-               class="flex items-center gap-3 text-gray-700 hover:text-[#3369FF] hover:bg-gray-50 py-2 px-3 rounded-lg transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                </svg>
-                Daily Tasks
-            </a>
-
-            <div>
-                <h3 class="text-xs font-semibold text-gray-500 uppercase px-3 py-2">
-                    Recent
-                </h3>
-
-                <div class="space-y-2 text-sm">
-                    <a href="#" class="block py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-[#3369FF]">
-                        March 12, 2026
-                    </a>
-                    <a href="#" class="block py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-[#3369FF]">
-                        March 11, 2026
-                    </a>
-                    <a href="#" class="block py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-[#3369FF]">
-                        March 10, 2026
-                    </a>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Logout Button -->
-        <div class="p-4 border-t border-gray-200">
-            <button type="button" onclick="window.location.href='index.php'" class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-red-600 transition-colors py-2 px-3 cursor-pointer">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                </svg>
-                <span>Logout</span>
-            </button>
-        </div>
-
-    </div>
+    
+    <!-- Sidebar -->
+    <?php include __DIR__ . '/Includes/sidebar.php'; ?>
 
 
     <!-- MAIN CONTENT -->
