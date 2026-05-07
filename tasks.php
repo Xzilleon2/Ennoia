@@ -10,7 +10,6 @@ include __DIR__ . '/Includes/head.php';
     <!-- Sidebar -->
     <?php include __DIR__ . '/Includes/sidebar.php'; ?>
 
-
     <!-- MAIN -->
     <div class="flex-1 bg-gray-50 overflow-y-auto">
 
