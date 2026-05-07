@@ -98,8 +98,12 @@
                 </button>
             </div>
 
+            
             <!-- Chat Title and Search -->
-            <div class="bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-between">
+            
+            <div class="bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-end">
+
+                <!-- Chat Title with Edit Button 
                 <div class="flex items-center gap-3">
                     <h2 id="chatTitle" class="text-2xl font-bold text-gray-900 cursor-pointer hover:text-[#3369FF] transition-colors" onclick="editTitle()">Todays Counselling</h2>
                     <button onclick="editTitle()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -108,6 +112,8 @@
                         </svg>
                     </button>
                 </div>
+                -->
+
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <input type="text" placeholder="Search" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent text-sm">
@@ -117,6 +123,7 @@
                     </button>
                 </div>
             </div>
+            
 
             <!-- Messages Area -->
             <div id="chatMessages" class="flex-1 overflow-y-auto px-8 py-6 space-y-4">
@@ -256,60 +263,66 @@
 
             lockChat();
 
-            const introMessage =
-                "Please introduce yourself briefly and let the user know how you can help them. Do it in a short paragraph.";
+            /* =========================
+            1. INTRO (WITH 3s TYPING)
+            ========================= */
+            const introTyping = showTypingIndicator();
 
-            const typing = showTypingIndicator();
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            introTyping.stop();
+
+            const introText =
+                "I'm Ennoia, your supportive companion for emotional support and gentle guidance. I'm here to listen, validate your feelings, and help you explore what's been going on in your life. We'll work together through conversations that feel like real talk, where we can dive into the complexities of emotions and find ways to move forward with greater clarity and resilience. Whether you're struggling with stress, anxiety, or just need someone to talk to, I'm here to offer a safe, non-judgmental space for you to express yourself and explore your thoughts and feelings.";
+
+            appendMessage('bot', introText);
+
+
+            /* =========================
+            2. FOLLOW-UP QUESTION (AI + TYPING)
+            ========================= */
+            const questionTyping = showTypingIndicator();
 
             try {
 
-                const response = await fetch(
-                    './API/chat.php',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-                        body: JSON.stringify({
-                            text: introMessage
-                        })
-                    }
-                );
+                const response = await fetch('./API/chat.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: "Ask a single warm, open-ended counseling question to start the conversation. Do NOT introduce yourself. Keep it short and natural."
+                    })
+                });
 
                 if (!response.ok) {
-                    throw new Error(
-                        `HTTP error ${response.status}`
-                    );
+                    throw new Error(`HTTP error ${response.status}`);
                 }
 
                 const data = await response.json();
 
-                typing.stop();
+                questionTyping.stop();
 
                 appendMessage(
                     'bot',
-                    data.response ||
-                    "Hello! I'm here to help you."
+                    data.response || "How have you been feeling lately?"
                 );
 
             } catch (error) {
 
                 console.error(error);
 
-                typing.stop();
+                questionTyping.stop();
 
                 appendMessage(
                     'bot',
-                    "Hello! I'm here to help you today."
+                    "How have you been feeling lately?"
                 );
 
             } finally {
                 unlockChat();
             }
         }
-
-
         /* =========================
         SEND MESSAGE HANDLER
         ========================= */
