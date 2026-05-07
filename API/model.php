@@ -84,12 +84,4 @@ function stream_bot_response($prompt) {
     curl_close($ch);
 }
 
-// Example usage (comment out for production)
-if (php_sapi_name() === 'cli') {
-    echo "-----Halbert AI Test-----\n";
-    $test_message = "Hi, how are you?";
-    echo "User: " . $test_message . "\n";
-    $result = get_bot_response($test_message);
-    echo "Bot: " . $result . "\n";
-}
 ?>
