@@ -176,8 +176,8 @@
 
             bubble.className =
                 sender === 'user'
-                    ? 'max-w-md bg-[#395B64] text-white px-4 py-3 rounded-lg'
-                    : 'max-w-md bg-[#A6CFD5] text-gray-900 px-4 py-3 rounded-lg';
+                    ? 'max-w-md bg-[#3F646E] text-white px-4 py-3 rounded-lg'
+                    : 'max-w-md bg-[#395B64] text-white px-4 py-3 rounded-lg';
 
             bubble.innerHTML = `<p class="text-sm">${text}</p>`;
 
