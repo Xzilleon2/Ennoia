@@ -14,7 +14,7 @@ $today = date('Y-m-d');
     <div class="p-4">
         <button
             type="button"
-            onclick="loadChat('<?= $today ?>')"
+            onclick="goToToday()"
             class="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer">
             <span>Today's Chat</span>
         </button>
@@ -58,5 +58,19 @@ $today = date('Y-m-d');
             <span>Logout</span>
         </a>
     </div>
+
+    <script>
+        function goToToday() {
+            const today = '<?= $today ?>';
+            const onIndex = window.location.pathname.endsWith('index.php') 
+                            || window.location.pathname.endsWith('/');
+
+            if (onIndex && typeof loadChat === 'function') {
+                loadChat(today); // already on index — just load the chat
+            } else {
+                window.location.href = './index.php'; // redirect to index
+            }
+        }
+    </script>   
 
 </div>

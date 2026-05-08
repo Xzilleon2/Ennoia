@@ -48,76 +48,10 @@ class Messages extends Dbh {
                 AND created_at >= CURDATE()
                 AND created_at < (CURDATE() + INTERVAL 1 DAY)
                 ORDER BY created_at ASC
-                LIMIT 200
             ";
 
             $stmt = $this->connection()->prepare($query);
             $stmt->execute([$userid]);
-
-            $messages = [];
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $messages[] = $row;
-            }
-
-            return $messages;
-
-        } catch (PDOException $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-
-    /* =========================
-    GET CHAT DATES (SIDEBAR)
-    ========================= */
-    protected function getChatDates($userid) {
-        try {
-            $query = "
-                SELECT DATE(created_at) as chat_date
-                FROM messages
-                WHERE USER_ID = ?
-                GROUP BY DATE(created_at)
-                ORDER BY chat_date DESC
-                LIMIT 30
-            ";
-
-            $stmt = $this->connection()->prepare($query);
-            $stmt->execute([$userid]);
-
-            $dates = [];
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $dates[] = $row;
-            }
-
-            return $dates;
-
-        } catch (PDOException $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-
-    /* =========================
-    GET MESSAGES BY DATE
-    ========================= */
-    protected function getMessagesByDate($userid, $date) {
-        try {
-            $query = "
-                SELECT USER_MESSAGE, BOT_MESSAGE, created_at
-                FROM messages
-                WHERE USER_ID = ?
-                AND created_at >= ?
-                AND created_at < DATE_ADD(?, INTERVAL 1 DAY)
-                ORDER BY created_at ASC
-                LIMIT 50
-            ";
-
-            $stmt = $this->connection()->prepare($query);
-            $stmt->execute([$userid, $date, $date]);
 
             $messages = [];
 

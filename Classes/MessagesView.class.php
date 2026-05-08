@@ -1,4 +1,8 @@
 <?php
+if (defined('MESSAGES_VIEW_LOADED')) {
+    die('CIRCULAR INCLUDE: MessagesView.class.php loaded twice');
+}
+define('MESSAGES_VIEW_LOADED', true);
 include_once __DIR__ . "/Messages.class.php";
 
 class MessagesView extends Messages {
@@ -18,26 +22,6 @@ class MessagesView extends Messages {
     ========================= */
     public function ChatHistory($userid) {
         $messages = $this->getMessages($userid);
-
-        return $messages ?: [];
-    }
-
-
-    /* =========================
-    CHAT DATES (SIDEBAR SAFE)
-    ========================= */
-    public function GetChatDates($userid) {
-        $dates = $this->getChatDates($userid);
-
-        return $dates ?: [];
-    }
-
-
-    /* =========================
-    MESSAGES BY DATE (SAFE)
-    ========================= */
-    public function GetMessagesByDate($userid, $date) {
-        $messages = $this->getMessagesByDate($userid, $date);
 
         return $messages ?: [];
     }

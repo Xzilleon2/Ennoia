@@ -1,4 +1,8 @@
 <?php
+if (defined('MESSAGES_CNTRL_LOADED')) {
+    die('CIRCULAR INCLUDE: MessagesCntrl.class.php loaded twice');
+}
+define('MESSAGES_CNTRL_LOADED', true);
 include_once __DIR__ . "/Messages.class.php";
 
 class MessagesCntrl extends Messages {

@@ -28,7 +28,9 @@
                     </svg>
                     <span class="text-sm text-gray-600">Chat</span>
                     <span class="text-sm text-gray-400">·</span>
-                    <span class="text-sm text-gray-600">March 12, 2025</span>
+                    <span class="text-sm text-gray-600" id="chatDateDisplay">
+                        <?= date('F j, Y') ?>
+                    </span>
                 </div>
                 <button class="w-10 h-10 rounded-full bg-[#11B8E5] text-white flex items-center justify-center hover:bg-[#0fa5d0] transition-colors cursor-pointer">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +173,7 @@
                 typing.stop();
 
                 appendMessage('bot',
-                    "I'm Ennoia, your supportive companion here to listen and help you reflect on what you're feeling."
+                    "I am Ennoia, your supportive companion, here to listen attentively and help you reflect on your thoughts and emotions in a safe and understanding space."
                 );
 
                 const qTyping = typingIndicator();
@@ -202,12 +204,23 @@
             LOAD CHAT
             ========================= */
             async function loadChat(date) {
+                
                 chatMessages.innerHTML = "";
 
                 const isToday = date === TODAY;
 
+                // Update header date
+                const dateObj = new Date(date + 'T00:00:00');
+                document.getElementById('chatDateDisplay').textContent =
+                    dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
                 try {
-                    const res = await fetch(`./API/history.php?action=messages&date=${date}`);
+                    // Use 'recent' when loading today, 'messages' for past dates
+                    const url = isToday
+                        ? `./API/history.php?action=recent`
+                        : `./API/history.php?action=messages&date=${date}`;
+
+                    const res = await fetch(url);
                     const data = await safeJson(res);
 
                     const messages = Array.isArray(data.messages) ? data.messages : [];
@@ -232,7 +245,6 @@
 
                 } catch (err) {
                     console.error(err);
-
                     appendMessage('bot', "Could not load chat history.");
 
                     if (isToday) {
