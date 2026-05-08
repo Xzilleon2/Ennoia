@@ -1,4 +1,5 @@
 <?php
+session_start();
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -12,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Include the model functions
 require_once __DIR__ . '/model.php';
+require_once __DIR__ . '/../Classes/MessagesCntrl.class.php';
+require_once __DIR__ . '/../Classes/MessagesView.class.php';
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -32,6 +35,9 @@ if (!$input || !isset($input['text'])) {
 $message = $input['text'];
 $stream = $input['stream'] ?? false;
 
+// Get the user ID from session
+$userid = $_SESSION['user_id'] ?? null;
+
 try {
     if ($stream) {
         // Stream response token by token
@@ -41,11 +47,36 @@ try {
         
         stream_bot_response($message);
     } else {
-        // Get full response at once
+
+        $raw_message = $message;
+
+        // Get Chat History
+        if ($userid) {
+            $record = new MessagesView();
+            $history = $record->ChatHistoryPrompt($userid);
+
+            if ($history) {
+                $combined_history = "";
+                foreach ($history as $entry) {
+                    $combined_history .= "User: " . $entry['USER_MESSAGE'] . "\n";
+                    $combined_history .= "Bot: " . $entry['BOT_MESSAGE'] . "\n";
+                }
+                $message = $combined_history . "User: " . $message;
+            }
+        }
+
+        // Get the bot's response
         $response = get_bot_response($message);
+
+        // Record only the raw user message, not the full history blob
+        if ($userid) {
+            $recorder = new MessagesCntrl($userid, $response, $raw_message);
+            $recorder->RecordMessages();
+        }
+
         echo json_encode([
             'response' => $response,
-            'success' => true
+            'success'  => true
         ]);
     }
 } catch (Exception $e) {

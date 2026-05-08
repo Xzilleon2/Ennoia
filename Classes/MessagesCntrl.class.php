@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once __DIR__ . "/Messages.class.php";
 
 class MessagesCntrl extends Messages {
@@ -30,7 +29,7 @@ class MessagesCntrl extends Messages {
         return true;
     }
 
-    // Private Methods
+    /** Private Methods **/ 
     private function checkEmpty(array $fields) {
         foreach ($fields as $name => $value) {
             if ($value === null || trim($value) === '') {
