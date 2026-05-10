@@ -166,36 +166,46 @@
             INTRO
             ========================= */
             async function runIntro() {
+
                 setLocked(true, "Ennoia is responding...");
 
+                // Initial welcome typing
                 const typing = typingIndicator();
-                await new Promise(r => setTimeout(r, 2000));
+
+                await new Promise(r => setTimeout(r, 1200));
+
                 typing.stop();
 
-                appendMessage('bot',
-                    "I am Ennoia, your supportive companion, here to listen attentively and help you reflect on your thoughts and emotions in a safe and understanding space."
+                appendMessage(
+                    'bot',
+                    "Hello, I am Ennoia! Your supportive companion. I'm here to listen attentively and help you reflect on your thoughts and emotions."
                 );
 
+                // Small pause before question
+                await new Promise(r => setTimeout(r, 600));
+
+                // Local starter questions
+                const starters = [
+                    "How have you been feeling lately?",
+                    "What’s been on your mind today?",
+                    "How was your day emotionally?",
+                    "Is there something you'd like to talk about today?",
+                    "What emotions have been strongest for you recently?",
+                    "What’s something that’s been bothering you lately?",
+                    "How are you feeling right now?"
+                ];
+
+                const question =
+                    starters[Math.floor(Math.random() * starters.length)];
+
+                // Typing effect
                 const qTyping = typingIndicator();
 
-                try {
-                    const res = await fetch('./API/chat.php', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            text: "Ask a short warm emotional opening question."
-                        })
-                    });
+                await new Promise(r => setTimeout(r, 1000));
 
-                    const data = await safeJson(res);
+                qTyping.stop();
 
-                    qTyping.stop();
-
-                    appendMessage('bot', data.response || "How have you been feeling lately?");
-                } catch {
-                    qTyping.stop();
-                    appendMessage('bot', "How have you been feeling lately?");
-                }
+                appendMessage('bot', question);
 
                 setLocked(false);
             }
@@ -256,7 +266,7 @@
             }
 
             /* =========================
-            SEND MESSAGE
+                SEND MESSAGE
             ========================= */
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();

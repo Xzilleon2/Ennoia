@@ -25,20 +25,83 @@ $recorder = new MessagesView();
 $action = $_GET['action'] ?? '';
 
 if ($action === 'dates') {
+
     $dates = $recorder->ChatHistory($userid);
-    echo json_encode(['dates' => $dates ?: []]);
+
+    echo json_encode([
+        'dates' => $dates ?: []
+    ]);
 
 } elseif ($action === 'recent') {
+
     $messages = $recorder->ChatHistory($userid);
 
-    // Remove the intro prompt from display
     $filtered = array_filter($messages, function($m) {
-        return trim($m['USER_MESSAGE']) !== 'Ask a short warm emotional opening question.';
+
+        $userMessage = trim($m['USER_MESSAGE'] ?? '');
+        $botMessage  = trim($m['BOT_MESSAGE'] ?? '');
+
+        // Ignore intro prompt
+        if ($userMessage === 'Ask a short warm emotional opening question.') {
+            return false;
+        }
+
+        // Ignore Ollama connection errors
+        if (strpos($botMessage, 'Unable to connect to Ollama model') !== false) {
+            return false;
+        }
+
+        return true;
     });
 
-    echo json_encode(['messages' => array_values($filtered) ?: []]);
+    echo json_encode([
+        'messages' => array_values($filtered)
+    ]);
+
+} elseif ($action === 'messages') {
+
+    $date = $_GET['date'] ?? null;
+
+    if (!$date) {
+        http_response_code(400);
+
+        echo json_encode([
+            'error' => 'Missing date'
+        ]);
+
+        exit;
+    }
+
+    $messages = $recorder->MessagesByDate($userid, $date);
+
+    $filtered = array_filter($messages, function($m) {
+
+        $userMessage = trim($m['USER_MESSAGE'] ?? '');
+        $botMessage  = trim($m['BOT_MESSAGE'] ?? '');
+
+        // Ignore intro prompt
+        if ($userMessage === 'Ask a short warm emotional opening question.') {
+            return false;
+        }
+
+        // Ignore Ollama connection errors
+        if (strpos($botMessage, 'Unable to connect to Ollama model') !== false) {
+            return false;
+        }
+
+        return true;
+    });
+
+    echo json_encode([
+        'messages' => array_values($filtered)
+    ]);
+
 } else {
+
     http_response_code(400);
-    echo json_encode(['error' => 'Invalid action']);
+
+    echo json_encode([
+        'error' => 'Invalid action'
+    ]);
 }
 ?>

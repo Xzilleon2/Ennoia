@@ -3,7 +3,7 @@
 // Configuration
 define('OLLAMA_URL', 'http://localhost:11434/api/generate');
 define('MODEL_NAME', 'Ennoia');
-define('MAX_TOKENS', 256);
+define('MAX_TOKENS', 1500);
 define('TEMPERATURE', 0.7);
 
 /**
@@ -27,6 +27,8 @@ function get_bot_response($prompt, $stream = false) {
 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json'
