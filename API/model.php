@@ -3,7 +3,7 @@
 // Configuration
 define('OLLAMA_URL', 'http://localhost:11434/api/generate');
 define('MODEL_NAME', 'Ennoia');
-define('MAX_TOKENS', 1500);
+define('MAX_TOKENS', 700);
 define('TEMPERATURE', 0.7);
 
 /**
