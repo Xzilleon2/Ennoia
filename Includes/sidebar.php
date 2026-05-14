@@ -1,5 +1,7 @@
 <?php
 $today = date('Y-m-d');
+include_once __DIR__ . "/../Classes/MessagesView.class.php";
+$messagesView = new MessagesView();
 ?>
 
 <div class="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -44,8 +46,19 @@ $today = date('Y-m-d');
             </h3>
 
             <!-- JS will inject here -->
-            <div id="chatDatesContainer" class="space-y-2">
-                <p class="text-xs text-gray-400 px-3">Loading...</p>
+            <div id="chatDatesContainer" class="flex flex-col space-y-2">
+                <?php
+                $dates = $messagesView->Dates($_SESSION['user_id']);
+
+                foreach ($dates as $date) {
+
+                    echo '
+                    <a href="./index.php?date=' . $date['message_date'] . '" 
+                    class="block text-xs text-gray-400 px-3 py-1 whitespace-nowrap hover:text-gray-700">
+                        ' . date('F j, Y', strtotime($date['message_date'])) . '
+                    </a>';
+                }
+                ?>
             </div>
         </div>
 

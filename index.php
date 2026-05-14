@@ -10,6 +10,12 @@
     // included files
     include_once __DIR__ . '/Includes/head.php';
     include_once __DIR__ . '/Classes/MessagesView.class.php';
+
+    // Date passed
+    $selectedDate = $_GET['date'] ?? date('Y-m-d');
+
+    $start = $selectedDate . " 00:00:00";
+    $end   = date('Y-m-d', strtotime($selectedDate . ' +1 day')) . " 00:00:00";
 ?>
 <body class="h-screen bg-white overflow-hidden">
     
@@ -88,7 +94,13 @@
 
             let isGenerating = false;
 
+            /* =========================
+            DATES
+            ========================= */
             const TODAY = new Date().toISOString().split('T')[0];
+
+            // PHP injected selected date OR fallback to today
+            const ACTIVE_DATE = "<?= $selectedDate ?? '' ?>" || TODAY;
 
             /* =========================
             UTILS
@@ -119,7 +131,7 @@
             }
 
             /* =========================
-            LOCKING
+            LOCKING (ENABLE/DISABLE CHAT)
             ========================= */
             function setLocked(state, placeholder = "") {
                 isGenerating = state;
@@ -163,46 +175,36 @@
             }
 
             /* =========================
-            INTRO
+            INTRO (TODAY ONLY)
             ========================= */
             async function runIntro() {
-
                 setLocked(true, "Ennoia is responding...");
 
-                // Initial welcome typing
                 const typing = typingIndicator();
-
                 await new Promise(r => setTimeout(r, 1200));
-
                 typing.stop();
 
                 appendMessage(
                     'bot',
-                    "Hello, I am Ennoia! Your supportive companion. I'm here to listen attentively and help you reflect on your thoughts and emotions."
+                    "Hello, I am Ennoia! Your supportive companion. I'm here to listen and help you reflect on your thoughts and emotions."
                 );
 
-                // Small pause before question
                 await new Promise(r => setTimeout(r, 600));
 
-                // Local starter questions
                 const starters = [
                     "How have you been feeling lately?",
                     "What’s been on your mind today?",
                     "How was your day emotionally?",
                     "Is there something you'd like to talk about today?",
                     "What emotions have been strongest for you recently?",
-                    "What’s something that’s been bothering you lately?",
+                    "What’s been bothering you lately?",
                     "How are you feeling right now?"
                 ];
 
-                const question =
-                    starters[Math.floor(Math.random() * starters.length)];
+                const question = starters[Math.floor(Math.random() * starters.length)];
 
-                // Typing effect
                 const qTyping = typingIndicator();
-
                 await new Promise(r => setTimeout(r, 1000));
-
                 qTyping.stop();
 
                 appendMessage('bot', question);
@@ -214,18 +216,22 @@
             LOAD CHAT
             ========================= */
             async function loadChat(date) {
-                
+
                 chatMessages.innerHTML = "";
 
                 const isToday = date === TODAY;
 
-                // Update header date
+                // update header
                 const dateObj = new Date(date + 'T00:00:00');
                 document.getElementById('chatDateDisplay').textContent =
-                    dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    dateObj.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
 
                 try {
-                    // Use 'recent' when loading today, 'messages' for past dates
+
                     const url = isToday
                         ? `./API/history.php?action=recent`
                         : `./API/history.php?action=messages&date=${date}`;
@@ -236,6 +242,7 @@
                     const messages = Array.isArray(data.messages) ? data.messages : [];
 
                     if (messages.length > 0) {
+
                         messages.forEach(m => {
                             if (m.USER_MESSAGE) appendMessage('user', m.USER_MESSAGE);
                             if (m.BOT_MESSAGE) appendMessage('bot', m.BOT_MESSAGE);
@@ -245,13 +252,13 @@
                         return;
                     }
 
+                    // no messages
                     if (isToday) {
                         await runIntro();
-                        return;
+                    } else {
+                        appendMessage('bot', "No messages found for this date.");
+                        setLocked(true);
                     }
-
-                    appendMessage('bot', "No messages found for this date.");
-                    setLocked(true);
 
                 } catch (err) {
                     console.error(err);
@@ -266,7 +273,7 @@
             }
 
             /* =========================
-                SEND MESSAGE
+            SEND MESSAGE
             ========================= */
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -294,8 +301,8 @@
                     const data = await safeJson(res);
 
                     typing.stop();
-
                     appendMessage('bot', data.response || "No response.");
+
                 } catch {
                     typing.stop();
                     appendMessage('bot', "Error connecting to AI service.");
@@ -333,7 +340,9 @@
             /* =========================
             INIT
             ========================= */
-            window.addEventListener('load', () => loadChat(TODAY));
+            window.addEventListener('load', () => {
+                loadChat(ACTIVE_DATE);
+            });
             </script>
         </div>
     </div>

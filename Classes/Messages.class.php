@@ -35,31 +35,54 @@ class Messages extends Dbh {
         }
     }
 
-
     /* =========================
-    GET TODAY MESSAGES (CHAT VIEW)
+    GET MESSAGE BASE ON DATES
     ========================= */
-    protected function getMessages($userid) {
+    protected function getMessages($userid, $date = null) {
         try {
+
+            // fallback to today if no date passed
+            $date = $date ?? date('Y-m-d');
+
+            $start = $date . " 00:00:00";
+            $end   = date('Y-m-d', strtotime($date . ' +1 day')) . " 00:00:00";
+
             $query = "
                 SELECT USER_MESSAGE, BOT_MESSAGE, created_at
                 FROM messages
                 WHERE USER_ID = ?
-                AND created_at >= CURDATE()
-                AND created_at < (CURDATE() + INTERVAL 1 DAY)
+                AND created_at >= ?
+                AND created_at < ?
                 ORDER BY created_at ASC
+            ";
+
+            $stmt = $this->connection()->prepare($query);
+            $stmt->execute([$userid, $start, $end]);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /* =========================
+    GET MESSAGE DATES
+    ========================= */
+    protected function getMessagesDates($userid) {
+        try {
+            $query = "
+                SELECT DISTINCT DATE(created_at) AS message_date
+                FROM messages
+                WHERE USER_ID = ?
+                ORDER BY message_date DESC
             ";
 
             $stmt = $this->connection()->prepare($query);
             $stmt->execute([$userid]);
 
-            $messages = [];
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $messages[] = $row;
-            }
-
-            return $messages;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $e) {
             error_log($e->getMessage());

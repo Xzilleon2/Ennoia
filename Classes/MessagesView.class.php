@@ -18,11 +18,27 @@ class MessagesView extends Messages {
 
 
     /* =========================
-    CHAT HISTORY (LIMITED SAFE OUTPUT)
+    CHAT HISTORY 
     ========================= */
     public function ChatHistory($userid) {
         $messages = $this->getMessages($userid);
 
         return $messages ?: [];
+    }
+
+    /* =========================
+    CHAT HISTORY BY DATE
+    ========================= */
+    public function MessagesByDate($userid, $date) {
+        return $this->getMessages($userid, $date) ?: [];
+    }
+
+    /* =========================
+    MESSAGES DATE
+    ========================= */
+    public function Dates($userid) {
+        $messages_dates = $this->getMessagesDates($userid);
+
+        return $messages_dates ?: [];
     }
 }

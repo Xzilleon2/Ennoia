@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -24,19 +25,11 @@ if (!$userid) {
 $recorder = new MessagesView();
 $action = $_GET['action'] ?? '';
 
-if ($action === 'dates') {
-
-    $dates = $recorder->ChatHistory($userid);
-
-    echo json_encode([
-        'dates' => $dates ?: []
-    ]);
-
-} elseif ($action === 'recent') {
-
-    $messages = $recorder->ChatHistory($userid);
-
-    $filtered = array_filter($messages, function($m) {
+/* =========================
+   FILTER FUNCTION (REUSED)
+========================= */
+function filterMessages($messages) {
+    return array_values(array_filter($messages, function ($m) {
 
         $userMessage = trim($m['USER_MESSAGE'] ?? '');
         $botMessage  = trim($m['BOT_MESSAGE'] ?? '');
@@ -46,62 +39,72 @@ if ($action === 'dates') {
             return false;
         }
 
-        // Ignore Ollama connection errors
+        // Ignore Ollama errors
         if (strpos($botMessage, 'Unable to connect to Ollama model') !== false) {
             return false;
         }
 
         return true;
-    });
+    }));
+}
 
-    echo json_encode([
-        'messages' => array_values($filtered)
-    ]);
+/* =========================
+   ROUTES
+========================= */
+switch ($action) {
 
-} elseif ($action === 'messages') {
+    /* -------------------------
+       GET DISTINCT CHAT DATES
+    ------------------------- */
+    case 'dates':
 
-    $date = $_GET['date'] ?? null;
-
-    if (!$date) {
-        http_response_code(400);
+        $dates = $recorder->Dates($userid);
 
         echo json_encode([
-            'error' => 'Missing date'
+            'dates' => $dates ?: []
         ]);
-
         exit;
-    }
 
-    $messages = $recorder->MessagesByDate($userid, $date);
+    /* -------------------------
+       GET TODAY / RECENT CHAT
+    ------------------------- */
+    case 'recent':
 
-    $filtered = array_filter($messages, function($m) {
+        $messages = $recorder->ChatHistory($userid);
 
-        $userMessage = trim($m['USER_MESSAGE'] ?? '');
-        $botMessage  = trim($m['BOT_MESSAGE'] ?? '');
+        echo json_encode([
+            'messages' => filterMessages($messages)
+        ]);
+        exit;
 
-        // Ignore intro prompt
-        if ($userMessage === 'Ask a short warm emotional opening question.') {
-            return false;
+    /* -------------------------
+       GET MESSAGES BY DATE
+    ------------------------- */
+    case 'messages':
+
+        $date = $_GET['date'] ?? null;
+
+        if (!$date) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing date']);
+            exit;
         }
 
-        // Ignore Ollama connection errors
-        if (strpos($botMessage, 'Unable to connect to Ollama model') !== false) {
-            return false;
-        }
+        $messages = $recorder->MessagesByDate($userid, $date);
 
-        return true;
-    });
+        echo json_encode([
+            'messages' => filterMessages($messages)
+        ]);
+        exit;
 
-    echo json_encode([
-        'messages' => array_values($filtered)
-    ]);
+    /* -------------------------
+       INVALID ACTION
+    ------------------------- */
+    default:
 
-} else {
-
-    http_response_code(400);
-
-    echo json_encode([
-        'error' => 'Invalid action'
-    ]);
+        http_response_code(400);
+        echo json_encode([
+            'error' => 'Invalid action'
+        ]);
+        exit;
 }
-?>
