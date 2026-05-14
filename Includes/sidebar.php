@@ -24,7 +24,8 @@ $messagesView = new MessagesView();
 
     <!-- NAV LINKS -->
     <nav class="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
-
+        
+        <!-- 
         <div>
             <a href="./analysis.php"
                class="flex items-center gap-3 text-gray-700 hover:text-[#3369FF] transition-colors py-2 px-3 rounded-lg hover:bg-gray-50">
@@ -38,6 +39,7 @@ $messagesView = new MessagesView();
                 <span>Daily Tasks</span>
             </a>
         </div>
+        -->
 
         <!-- RECENT CHATS (LAZY LOADED) -->
         <div>

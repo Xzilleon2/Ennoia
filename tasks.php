@@ -8,7 +8,14 @@ include __DIR__ . '/Includes/head.php';
 <div class="flex h-screen">
 
     <!-- Sidebar -->
-    <?php include __DIR__ . '/Includes/sidebar.php'; ?>
+    <?php 
+        include __DIR__ . '/Includes/sidebar.php'; 
+        // Date passed
+        $selectedDate = $_GET['date'] ?? date('Y-m-d');
+
+        $start = $selectedDate . " 00:00:00";
+        $end   = date('Y-m-d', strtotime($selectedDate . ' +1 day')) . " 00:00:00";
+    ?>
 
     <!-- MAIN -->
     <div class="flex-1 bg-gray-50 overflow-y-auto">

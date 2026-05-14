@@ -9,7 +9,15 @@ include __DIR__ . '/Includes/head.php';
 
     
     <!-- Sidebar -->
-    <?php include __DIR__ . '/Includes/sidebar.php'; ?>
+    <?php 
+        include __DIR__ . '/Includes/sidebar.php';
+
+        // Date passed
+        $selectedDate = $_GET['date'] ?? date('Y-m-d');
+
+        $start = $selectedDate . " 00:00:00";
+        $end   = date('Y-m-d', strtotime($selectedDate . ' +1 day')) . " 00:00:00";
+    ?>
 
 
     <!-- MAIN CONTENT -->
