@@ -10,16 +10,23 @@
         define('LOADING_OVERLAY', true);
         include __DIR__ . '/Includes/loading.php';
     ?>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+    </style>
     
     <!-- Navigation Bar -->
     <nav class="fixed top-0 w-full backdrop-blur z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-white">Ennoia</h1>
+            <h1 class="text-2xl font-bold text-white"><a href="#Hero">Ennoia</a></h1>
             <div class="flex gap-8 items-center">
-                <a href="#" class="text-white hover:text-[#2F4D55]">About Us</a>
-                <a href="#" class="text-white hover:text-[#2F4D55]">Experience</a>
-                <a href="#" class="text-white hover:text-[#2F4D55]">Training</a>
-                <a href="#" class="text-white hover:text-[#2F4D55]">Contact</a>
+                <a href="#About Us" class="text-white hover:text-[#2F4D55]">About Us</a>
+                <a href="#Experience" class="text-white hover:text-[#2F4D55]">Experience</a>
+                <a href="#Materials" class="text-white hover:text-[#2F4D55]">Training</a>
+                <a href="#Testimonials" class="text-white hover:text-[#2F4D55]">Testimonials</a>
             </div>
             <div class="flex gap-3 items-center">
                 <button type="button" onclick="navigate('sign_in.php', 'Signing in…')" class="hover:bg-[#2F4D55] text-white py-2 px-5 transition-colors cursor-pointer">
@@ -33,7 +40,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="w-full min-h-screen pt-20 flex items-center justify-center px-8 bg-cover bg-center relative" style="background-image: url('./Assets/Imgs/Banner1.jpg');">
+    <section id="Hero" class="w-full min-h-screen pt-20 flex items-center justify-center px-8 bg-cover bg-center relative" style="background-image: url('./Assets/Imgs/Banner1.jpg');">
         <!-- Overlay -->
         <div class="absolute inset-0 bg-black/40"></div>
         
@@ -44,15 +51,15 @@
         <div class="relative z-10 flex flex-col justify-center items-center gap-8 text-center max-w-3xl">
             <div>
                 <h1 class="text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                    Make Conversations<br>Enjoyable & Effortless
+                    A Safe Space to Talk<br>and Be Heard
                 </h1>
                 <p class="text-lg text-white/90">
-                   Turn your conversations  into something smarter and more effortless get answers, ideas, and solutions with speed and ease.
+                    Ennoia is your private emotional support companion, here to help you slow down, reflect on what you’re feeling, and gently make sense of your thoughts through calm, supportive conversation that leads to greater clarity and self-understanding.
                 </p>
             </div>
             <div class="flex items-center justify-center w-full max-w-md">
                 <div class="relative w-full bg-white/20 backdrop-blur rounded-full px-6 py-3 flex items-center justify-between border border-white/30">
-                    <input type="text" placeholder="Send a Message" class="bg-transparent text-white placeholder-white/70 outline-none flex-1 text-sm">
+                    <input type="text" placeholder="Talk about how you're feeling..." class="bg-transparent text-white placeholder-white/70 outline-none flex-1 text-sm">
                     <a href="./chats.php" class="bg-[#395B64] hover:bg-[#2F4D55] transition-colors rounded-full p-2 flex items-center justify-center ml-2">
                         <img src="./Assets/Imgs/Send.svg" alt="Send" class="w-5 h-5">
                     </a>
@@ -62,7 +69,7 @@
     </section>
 
     <!-- Why Choose Us Section -->
-    <section class="w-full py-20 px-8 bg-white">
+    <section id="About Us" class="w-full py-20 px-8 bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col lg:flex-row gap-16 items-start">
                 <!-- Left Title -->
@@ -75,25 +82,25 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <!-- Feature 1 -->
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Casual Chats</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Emotional Support</h3>
                             <p class="text-gray-600 text-sm">
-                                The advantage of having a workspace chat is it streamlines your work process and all around facilitates.
+                                 A calm space where you can express your thoughts freely without judgment.
                             </p>
                         </div>
 
                         <!-- Feature 2 -->
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Fun Experience</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Reflective Conversations</h3>
                             <p class="text-gray-600 text-sm">
-                                You can just use it and you can get affordable price and still enjoy the features that are any time.
+                               Helps you understand your emotions through guided, thoughtful dialogue.
                             </p>
                         </div>
 
                         <!-- Feature 3 -->
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Endless topics</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Personal Clarity</h3>
                             <p class="text-gray-600 text-sm">
-                                We provide many unusual work space so that you can choose the workspace for your long thing.
+                                Encourages self-awareness and emotional clarity through supportive conversation.
                             </p>
                         </div>
                     </div>
@@ -103,7 +110,7 @@
     </section>
 
     <!-- Experience Section -->
-    <section class="w-full py-20 px-8 bg-white">
+    <section id="Experience" class="w-full py-20 px-8 bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <!-- Left Image -->
@@ -114,9 +121,9 @@
                 <!-- Right Content -->
                 <div class="flex flex-col gap-1 h-full">
                     <p class="text-[#395B64] font-semibold text-sm mb-3">EXPERIENCES</p>
-                    <h2 class="text-4xl lg:text-5xl font-bold text-black mb-6">We Provide You The<br>Best Experience</h2>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-black mb-6">A Supportive Space for<br>Emotional Clarity</h2>
                     <p class="text-gray-600 leading-relaxed text-lg">
-                        You don't have to worry about the result because of all of these interns are made by people who are professionals in their fields with an elegant and luxurious style and with premium quality experience.
+                        Ennoia is designed to help you process emotions, reflect on experiences, and find calm through conversation. It does not judge or interrupt—it listens and responds with care and understanding.
                     </p>
                 </div>
             </div>
@@ -124,15 +131,15 @@
     </section>
 
     <!-- Materials Section -->
-    <section class="w-full py-20 px-8 bg-white">
+    <section id="Materials" class="w-full py-20 px-8 bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col lg:flex-row gap-12 items-center">
                 <!-- Left Content -->
                 <div class="flex-1">
                     <p class="text-[#395B64] font-semibold text-sm mb-3">MATERIALS</p>
-                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Carefully Crafted<br>Training For Optimal<br>Performance</h2>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Thoughtfully Designed<br>for Emotional Wellbeing</h2>
                     <p class="text-gray-600">
-                        Because we're very serious about developing hardware for our measurement using a very meticulous and famous night but at a relatively low price
+                        Built to support reflective thinking and emotional awareness through simple, natural conversation that helps you understand yourself better over time.
                     </p>
                 </div>
 
@@ -156,7 +163,7 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class="w-full py-32 px-8 bg-white">
+    <section id="Testimonials" class="w-full py-32 px-8 bg-white">
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
             <div class="text-center mb-20">
@@ -196,7 +203,7 @@
                                 </div>
                             </div>
                             <p class="text-gray-600 text-sm mb-3">
-                                "The interface is incredibly intuitive, offering a seamless flow of conversation that feels natural and completely uninterrupted."
+                                "It feels like a safe place where I can talk freely and make sense of my emotions without feeling judged."
                             </p>
                             <div class="flex gap-1">
                                 <span class="text-orange-400">★★★★★</span>
@@ -219,7 +226,7 @@
                                 </div>
                             </div>
                             <p class="text-gray-600 text-sm mb-3">
-                                "Offers a distraction-free space where you can focus entirely on your thoughts without the tech getting in the way."
+                               "It helped me slow down my thoughts and actually understand what I was feeling instead of just ignoring it."
                             </p>
                             <div class="flex gap-1">
                                 <span class="text-orange-400">★★★★★</span>
@@ -242,7 +249,7 @@
                                 </div>
                             </div>
                             <p class="text-gray-600 text-sm mb-3">
-                                "A truly seamless experience stays consistent from the first message to the last, making digital counselling feel incredibly human."
+                                "Talking here feels safe. I don’t have to filter myself or worry about being judged."
                             </p>
                             <div class="flex gap-1">
                                 <span class="text-orange-400">★★★★★</span>
