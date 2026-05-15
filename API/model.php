@@ -1,89 +1,98 @@
 <?php
 
-// Configuration
-define('OLLAMA_URL', 'http://localhost:11434/api/generate');
-define('MODEL_NAME', 'Ennoia');
-define('MAX_TOKENS', 700);
-define('TEMPERATURE', 0.7);
+// =========================
+// MAIN RESPONSE FUNCTION
+// =========================
+function get_bot_response($prompt)
+{
+    $url = "http://localhost:11434/api/generate";
 
-/**
- * Get response from Ollama model
- * @param string $prompt - The user's message
- * @param bool $stream - Whether to stream the response
- * @return string - The model's response
- */
-function get_bot_response($prompt, $stream = false) {
     $data = [
-        "model" => MODEL_NAME,
+        "model" => "Ennoia",
         "prompt" => $prompt,
-        "stream" => $stream,
-        "options" => [
-            "num_predict" => MAX_TOKENS,
-            "temperature" => TEMPERATURE
-        ]
+        "stream" => false
     ];
 
-    $ch = curl_init(OLLAMA_URL);
+    $ch = curl_init($url);
 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json"
+        ],
+        CURLOPT_POSTFIELDS => json_encode($data),
+        CURLOPT_TIMEOUT => 120
     ]);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 
-    $response = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    $result = curl_exec($ch);
 
-    if ($http_code !== 200) {
-        return "Error: Unable to connect to Ollama model (HTTP {$http_code})";
+    if (curl_errno($ch)) {
+        throw new Exception("Curl error: " . curl_error($ch));
     }
 
-    $result = json_decode($response, true);
-    return $result['response'] ?? "Error: Invalid response from model";
+    curl_close($ch);
+
+    $decoded = json_decode($result, true);
+
+    $response = $decoded['response'] ?? null;
+
+    if (!$response) return null;
+
+    // CLEAN DASH PATTERNS
+    $response = str_replace(
+        ["--", "—", "–"],
+        ["-", "-", "-"],
+        $response
+    );
+
+    // OPTIONAL: remove double spacing caused by replacements
+    $response = preg_replace('/\s+/', ' ', $response);
+
+    return trim($response);
 }
 
-/**
- * Stream bot response token by token
- * @param string $prompt - The user's message
- */
-function stream_bot_response($prompt) {
+
+// =========================
+// STREAMING RESPONSE (SSE)
+// =========================
+function stream_bot_response($prompt)
+{
+    $url = "http://localhost:11434/api/generate";
+
     $data = [
-        "model" => MODEL_NAME,
+        "model" => "Ennoia",
         "prompt" => $prompt,
-        "stream" => true,
-        "options" => [
-            "num_predict" => MAX_TOKENS,
-            "temperature" => TEMPERATURE
-        ]
+        "stream" => true
     ];
 
-    $ch = curl_init(OLLAMA_URL);
+    $ch = curl_init($url);
 
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'
+    curl_setopt_array($ch, [
+        CURLOPT_WRITEFUNCTION => function ($ch, $chunk) {
+            $json = json_decode($chunk, true);
+
+            if (isset($json['response'])) {
+                echo "data: " . $json['response'] . "\n\n";
+                @ob_flush();
+                flush();
+            }
+
+            return strlen($chunk);
+        },
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json"
+        ],
+        CURLOPT_POSTFIELDS => json_encode($data)
     ]);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 120);
-    curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-
-    // Set up callback for streaming
-    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($curl, $data) {
-        $result = json_decode($data, true);
-        if (!empty($result['response'])) {
-            echo $result['response'];
-            flush();
-        }
-        return strlen($data);
-    });
 
     curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo "data: ERROR " . curl_error($ch) . "\n\n";
+        flush();
+    }
+
     curl_close($ch);
 }
-
-?>

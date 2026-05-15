@@ -38,11 +38,6 @@
                         <?= date('F j, Y') ?>
                     </span>
                 </div>
-                <button class="w-10 h-10 rounded-full bg-[#11B8E5] text-white flex items-center justify-center hover:bg-[#0fa5d0] transition-colors cursor-pointer">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                </button>
             </div>
 
             
@@ -52,10 +47,14 @@
 
                 <div class="flex items-center gap-3">
                     <div class="relative">
-                        <input type="text" placeholder="Search" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent text-sm">
+                        <input id="chatSearchInput" type="text" placeholder="Hello.." class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3369FF] focus:border-transparent text-sm">
                     </div>
-                    <button class="bg-[#395B64] hover:bg-[#2F4D55] text-white font-semibold py-2 px-6 rounded-lg transition-colors cursor-pointer text-sm">
+                    <button id="chatSearchBtn" class="bg-[#395B64] hover:bg-[#2F4D55] text-white font-semibold py-2 px-6 rounded-lg transition-colors cursor-pointer text-sm">
                         Search
+                    </button>
+                    <button id="chatNextBtn"
+                    class="bg-[#395B64] hover:bg-[#2F4D55 text-white font-semibold py-2 px-4 rounded-lg text-sm cursor-pointer">
+                        Next
                     </button>
                 </div>
             </div>
@@ -310,6 +309,86 @@
 
                 setLocked(false);
             });
+
+            /* =========================
+            SEARCH FUNCTIONALITY
+            ========================= */
+            const searchInput = document.getElementById("chatSearchInput");
+            const searchBtn = document.getElementById("chatSearchBtn");
+
+            let searchResults = [];
+            let currentIndex = 0;
+
+            function runSearch(query) {
+                if (!query) return;
+
+                const messages = document.querySelectorAll("#chatMessages p");
+
+                searchResults = [];
+                currentIndex = 0;
+
+                // clear previous highlights
+                messages.forEach(m => {
+                    m.innerHTML = m.textContent;
+                });
+
+                messages.forEach((msg, index) => {
+                    if (msg.textContent.toLowerCase().includes(query.toLowerCase())) {
+                        searchResults.push(msg);
+                    }
+                });
+
+                if (searchResults.length === 0) {
+                    alert("No results found");
+                    return;
+                }
+
+                highlightResult();
+            }
+
+            // highlight current search result and scroll into view
+            function highlightResult() {
+                const el = searchResults[currentIndex];
+
+                if (!el) return;
+
+                // scroll into view
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+                // highlight bubble
+                const bubble = el.parentElement;
+
+                bubble.style.transition = "0.3s";
+                bubble.style.boxShadow = "0 0 0 3px #11B8E5";
+
+                setTimeout(() => {
+                    bubble.style.boxShadow = "none";
+                }, 1500);
+            }
+
+            function nextResult() {
+                if (searchResults.length === 0) return;
+
+                currentIndex = (currentIndex + 1) % searchResults.length;
+                highlightResult();
+            }
+
+            const nextBtn = document.getElementById("chatNextBtn");
+            nextBtn.addEventListener("click", () => {
+                nextResult();
+            });
+
+            // Connet search button
+            searchBtn.addEventListener("click", () => {
+                runSearch(searchInput.value.trim());
+            });
+
+            searchInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    runSearch(searchInput.value.trim());
+                }
+            });
+
 
             /* =========================
             AUTO RESIZE
