@@ -3,7 +3,7 @@
 <html lang="en">
 <?php 
     if (!isset($_SESSION['user_id'])) {
-        header("Location: sign_in.php");
+        header("Location: welcome.php");
         exit();
     }
 

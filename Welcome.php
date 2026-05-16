@@ -21,7 +21,10 @@
     <!-- Navigation Bar -->
     <nav class="fixed top-0 w-full backdrop-blur z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-white"><a href="#Hero">Ennoia</a></h1>
+            <div class="flex items-center">
+                <img src="./Assets/Logo/Ennoia-Logo.png" alt="Ennoia Logo" class="w-10 h-10 mr-2">
+                <h1 class="text-2xl font-bold text-white"><a href="#Hero">Ennoia</a></h1>
+            </div>
             <div class="flex gap-8 items-center">
                 <a href="#About Us" class="text-white hover:text-[#2F4D55]">About Us</a>
                 <a href="#Experience" class="text-white hover:text-[#2F4D55]">Experience</a>
@@ -334,8 +337,8 @@
                 
                 // Change link colors
                 document.querySelectorAll('nav a').forEach(link => {
-                    link.classList.remove('text-white', 'hover:text-[#3369FF]', 'text-gray-600');
-                    link.classList.add('text-gray-900', 'hover:text-[#3369FF]');
+                    link.classList.remove('text-white', 'hover:text-[#2F4D55]', 'text-gray-600');
+                    link.classList.add('text-gray-900', 'hover:text-[#2F4D55]');
                 });
                 
                 // Change button text colors
@@ -354,7 +357,7 @@
                 
                 document.querySelectorAll('nav a').forEach(link => {
                     link.classList.remove('text-gray-900');
-                    link.classList.add('text-white', 'hover:text-[#3369FF]');
+                    link.classList.add('text-white', 'hover:text-[#2F4D55]');
                 });
                 
                 // Change button text colors back to white
