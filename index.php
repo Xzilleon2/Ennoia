@@ -95,7 +95,12 @@
             /* =========================
             DATES
             ========================= */
-            const TODAY = new Date().toISOString().split('T')[0];
+            const TODAY = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Manila',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).format(new Date());
 
             // PHP injected selected date OR fallback to today
             const ACTIVE_DATE = "<?= $selectedDate ?? '' ?>" || TODAY;

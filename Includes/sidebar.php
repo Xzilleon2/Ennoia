@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Manila');
-$today = date('Y-m-d');
+$today = (new DateTime('now', new DateTimeZone('Asia/Manila')))->format('Y-m-d');
 include_once __DIR__ . "/../Classes/MessagesView.class.php";
 $messagesView = new MessagesView();
 ?>
@@ -81,15 +81,26 @@ $messagesView = new MessagesView();
     </div>
 
     <script>
+
+        function getManilaDate() {
+            return new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Manila',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).format(new Date());
+        }
+
         function goToToday() {
-            const today = '<?= $today ?>';
+            const today = getManilaDate();
+
             const onIndex = window.location.pathname.endsWith('index.php') 
                             || window.location.pathname.endsWith('/');
 
             if (onIndex && typeof loadChat === 'function') {
-                loadChat(today); // already on index — just load the chat
+                loadChat(today);
             } else {
-                window.location.href = './index.php'; // redirect to index
+                window.location.href = './index.php?date=' + today;
             }
         }
     </script>   
