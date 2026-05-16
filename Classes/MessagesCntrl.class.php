@@ -22,15 +22,25 @@ class MessagesCntrl extends Messages {
     // Register Method
     public function RecordMessages() {
 
-        if (!$this->checkEmpty(['userid' => $this->userid, 'botmessage' => $this->botmessage, 'usermessage' => $this->usermessage])) {
+        if (!$this->checkEmpty([
+            'userid' => $this->userid,
+            'botmessage' => $this->botmessage,
+            'usermessage' => $this->usermessage
+        ])) {
             return false;
         }
 
-        if (!$this->insertMessage($this->userid, $this->botmessage, $this->usermessage)) {
+        $lastId = $this->insertMessage(
+            $this->userid,
+            $this->botmessage,
+            $this->usermessage
+        );
+
+        if (!$lastId) {
             return false;
         }
 
-        return true;
+        return $lastId;
     }
 
     /** Private Methods **/ 

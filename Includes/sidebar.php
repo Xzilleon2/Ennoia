@@ -38,7 +38,22 @@ $messagesView = new MessagesView();
     </div>
 
     <!-- NAV LINKS -->
-    <nav class="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
+    <nav class="flex-1 px-4 py-6 space-y-4 overflow-y-auto hide-scrollbar">
+
+        <!-- ADDITIONAL ACTIVITIES -->
+        <div>
+            <h3 class="text-xs font-semibold text-gray-600 uppercase px-3 py-2">
+                Explore
+            </h3>
+            <a href="./EmotionInsight.php" 
+            class="block text-xs text-gray-400 px-3 py-1 whitespace-nowrap hover:text-gray-700">
+                Emotional Insights
+            </a>
+            <a href="./Goals&Tasks.php" 
+            class="block text-xs text-gray-400 px-3 py-1 whitespace-nowrap hover:text-gray-700">
+                Goals & Tasks
+            </a>
+        </div>
 
         <!-- RECENT CHATS -->
         <div>

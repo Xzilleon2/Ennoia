@@ -101,10 +101,11 @@ class Messages extends Dbh {
                 VALUES (?, ?, ?)
             ";
 
-            $stmt = $this->connection()->prepare($query);
+            $conn = $this->connection();
+            $stmt = $conn->prepare($query);
             $stmt->execute([$userid, $botmessage, $usermessage]);
 
-            return true;
+            return $conn->lastInsertId();
 
         } catch (PDOException $e) {
             error_log($e->getMessage());

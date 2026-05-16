@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 require_once __DIR__ . '/model.php';
 require_once __DIR__ . '/../Classes/MessagesCntrl.class.php';
 require_once __DIR__ . '/../Classes/MessagesView.class.php';
+require_once __DIR__ . '/../Classes/EmotionsCntrl.class.php';
 
 $input = json_decode(file_get_contents("php://input"), true);
 
@@ -91,9 +92,54 @@ try {
     // SAVE CHAT
     if ($userid) {
         $recorder = new MessagesCntrl($userid, $response, $message);
-        $recorder->RecordMessages();
+        $messageid = $recorder->RecordMessages();
     }
 
+    // SAVE EMOTION ANALYSIS
+    $analysisprompt = "
+        Return ONLY valid JSON. No explanation. No text.
+
+        {
+        \"emotion\": \"happy\",
+        \"confidence\": 0.85,
+        \"sentiment\": \"positive\"
+        }
+
+        Message:
+        $message
+    ";
+
+    // Bot Emotion Analysis Response
+    $emotion_analysis = get_bot_response($analysisprompt);
+    $analysis = json_decode($emotion_analysis, true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON ERROR: " . json_last_error_msg());
+        error_log("RAW: " . $emotion_analysis);
+
+        $analysis = [
+            "emotion" => "unknown",
+            "confidence" => 0,
+            "sentiment" => "neutral"
+        ];
+    }
+
+    if (!$analysis) {
+    $analysis = [
+        "emotion" => "unknown",
+        "confidence" => 0,
+        "sentiment" => "neutral"
+    ];
+}
+
+    // SAVE EMOTION ANALYSIS TO DATABASE
+    if ($userid && $messageid) {
+
+        $emotionsCntrl = new EmotionsCntrl($messageid, $userid, $analysis['emotion'], $analysis['confidence'], $analysis['sentiment']);
+        $emotionsCntrl->RecordEmotion();
+    }
+
+    // Return JSON response with bot's reply
     echo json_encode([
         "success" => true,
         "response" => $response

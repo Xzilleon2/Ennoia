@@ -41,8 +41,7 @@
             </div>
 
             
-            <!-- Chat Title and Search -->
-            
+            <!-- Search -->
             <div class="bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-end">
 
                 <div class="flex items-center gap-3">
