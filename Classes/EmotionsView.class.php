@@ -11,4 +11,13 @@ class EmotionsView extends Emotions {
 
         return $emotions ?: [];
     }
+
+    /* =========================
+    GET TOP EMOTION THIS WEEK
+    ========================= */
+    public function TopEmotionThisWeek($userid) {
+        $emotions = $this->getTopEmotion($userid);
+
+        return $emotions ?: [];
+    }
 }

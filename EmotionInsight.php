@@ -9,6 +9,12 @@
     }
 
     include_once __DIR__ . '/Includes/head.php';
+    include_once __DIR__ . '/Classes/Dbh.class.php';
+    include_once __DIR__ . '/Classes/EmotionsView.class.php';
+
+    $emotionView = new EmotionsView();
+    $emotions = $emotionView->TopEmotionHistory($_SESSION['user_id']);
+    $topemotion = $emotionView->TopEmotionThisWeek($_SESSION['user_id']);
 ?>
 
 <body class="h-screen bg-white overflow-hidden">
@@ -58,7 +64,7 @@
                     </p>
 
                     <h2 class="text-2xl font-semibold text-[#395B64] mt-2">
-                        Calm
+                        <?php echo !empty($topemotion) ? $topemotion[0]['predicted_emotion'] : 'N/A'; ?>
                     </h2>
 
                     <p class="text-xs text-gray-400 mt-2">
@@ -72,7 +78,7 @@
                     </p>
 
                     <h2 class="text-2xl font-semibold text-[#395B64] mt-2">
-                        82%
+                         <?php echo !empty($topemotion) ? round($topemotion[0]['emotion_percentage'], 2) : 'N/A'; ?>%
                     </h2>
 
                     <p class="text-xs text-gray-400 mt-2">
@@ -86,7 +92,7 @@
                     </p>
 
                     <h2 class="text-2xl font-semibold text-[#395B64] mt-2">
-                        14
+                         <?php echo !empty($topemotion) ? $topemotion[0]['total_count'] : 'N/A'; ?>
                     </h2>
 
                     <p class="text-xs text-gray-400 mt-2">
@@ -150,73 +156,43 @@
 
                     <div class="space-y-5">
 
-                        <!-- Item -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-700 font-medium">
-                                    Calm
-                                </span>
+                        <?php if (!empty($emotions)) : ?>
 
-                                <span class="text-gray-400">
-                                    82%
-                                </span>
-                            </div>
+                            <?php foreach ($emotions as $emotion) : ?>
 
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-[#395B64] h-2 rounded-full w-[82%]"></div>
-                            </div>
-                        </div>
+                                <?php
+                                    $name = ucfirst($emotion['predicted_emotion']);
+                                    $percent = $emotion['emotion_percentage'];
+                                ?>
 
-                        <!-- Item -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-700 font-medium">
-                                    Joy
-                                </span>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span class="text-gray-700 font-medium">
+                                            <?= htmlspecialchars($name) ?>
+                                        </span>
 
-                                <span class="text-gray-400">
-                                    64%
-                                </span>
-                            </div>
+                                        <span class="text-gray-400">
+                                            <?= $percent ?>%
+                                        </span>
+                                    </div>
 
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-[#395B64] h-2 rounded-full w-[64%]"></div>
-                            </div>
-                        </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2">
+                                        <div 
+                                            class="bg-[#395B64] h-2 rounded-full"
+                                            style="width: <?= $percent ?>%">
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- Item -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-700 font-medium">
-                                    Anxiety
-                                </span>
+                            <?php endforeach; ?>
 
-                                <span class="text-gray-400">
-                                    41%
-                                </span>
-                            </div>
+                        <?php else : ?>
 
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-[#395B64] h-2 rounded-full w-[41%]"></div>
-                            </div>
-                        </div>
+                            <p class="text-sm text-gray-400">
+                                No emotion data available for this week.
+                            </p>
 
-                        <!-- Item -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-700 font-medium">
-                                    Sadness
-                                </span>
-
-                                <span class="text-gray-400">
-                                    26%
-                                </span>
-                            </div>
-
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-[#395B64] h-2 rounded-full w-[26%]"></div>
-                            </div>
-                        </div>
+                        <?php endif; ?>
 
                     </div>
 
