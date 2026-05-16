@@ -4,7 +4,7 @@
         // included files
         include __DIR__ . '/Includes/head.php';
     ?>
-<body class="h-full bg-white">
+<body class="h-full bg-white overflow-x-hidden">
 
     <?php 
         define('LOADING_OVERLAY', true);
@@ -60,9 +60,9 @@
             <div class="flex items-center justify-center w-full max-w-md">
                 <div class="relative w-full bg-white/20 backdrop-blur rounded-full px-6 py-3 flex items-center justify-between border border-white/30">
                     <input type="text" placeholder="Talk about how you're feeling..." class="bg-transparent text-white placeholder-white/70 outline-none flex-1 text-sm">
-                    <a href="./chats.php" class="bg-[#395B64] hover:bg-[#2F4D55] transition-colors rounded-full p-2 flex items-center justify-center ml-2">
+                    <button type="button" onclick="navigate('sign_in.php', 'Redirecting…')" class="bg-[#395B64] hover:bg-[#2F4D55] transition-colors rounded-full p-2 flex items-center justify-center ml-2 cursor-pointer">
                         <img src="./Assets/Imgs/Send.svg" alt="Send" class="w-5 h-5">
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

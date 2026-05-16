@@ -46,7 +46,7 @@ function get_bot_response($prompt)
         $response
     );
 
-    // OPTIONAL: remove double spacing caused by replacements
+    // Remove double spacing caused by replacements
     $response = preg_replace('/\s+/', ' ', $response);
 
     return trim($response);
@@ -54,7 +54,7 @@ function get_bot_response($prompt)
 
 
 // =========================
-// STREAMING RESPONSE (SSE)
+// STREAMING RESPONSE
 // =========================
 function stream_bot_response($prompt)
 {

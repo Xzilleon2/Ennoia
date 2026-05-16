@@ -7,9 +7,24 @@ $messagesView = new MessagesView();
 <div class="w-64 bg-white border-r border-gray-200 flex flex-col">
 
     <!-- HEADER -->
-    <div class="p-6 border-b border-gray-200">
-        <h1 class="text-xl font-bold text-gray-900">Ennoia</h1>
-        <p class="text-xs text-gray-600">Express yourself</p>
+    <div class="p-3 border-b border-gray-200 flex flex-col items-center">  
+        <img src="./Assets/Logo/Ennoia-LOGO.svg" alt="Ennoia Logo" class="w-40 h-20">
+
+        <h1 class="text-2xl font-bold text-gray-900">
+            Ennoia
+        </h1>
+        <p class="text-xs text-gray-600 mt-1">
+            Express yourself
+        </p>
+        <!--
+        <h1 class="text-2xl font-bold text-gray-900">
+            Ennoia
+        </h1>
+
+        <p class="text-xs text-gray-600 mt-1">
+            Express yourself
+        </p>
+        -->
     </div>
 
     <!-- TODAY BUTTON -->
@@ -24,24 +39,8 @@ $messagesView = new MessagesView();
 
     <!-- NAV LINKS -->
     <nav class="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
-        
-        <!-- 
-        <div>
-            <a href="./analysis.php"
-               class="flex items-center gap-3 text-gray-700 hover:text-[#3369FF] transition-colors py-2 px-3 rounded-lg hover:bg-gray-50">
-                <span>Analysis</span>
-            </a>
-        </div>
 
-        <div>
-            <a href="./tasks.php"
-               class="flex items-center gap-3 text-gray-700 hover:text-[#3369FF] transition-colors py-2 px-3 rounded-lg hover:bg-gray-50">
-                <span>Daily Tasks</span>
-            </a>
-        </div>
-        -->
-
-        <!-- RECENT CHATS (LAZY LOADED) -->
+        <!-- RECENT CHATS -->
         <div>
             <h3 class="text-xs font-semibold text-gray-600 uppercase px-3 py-2">
                 Recent
