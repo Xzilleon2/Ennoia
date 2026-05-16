@@ -1,4 +1,4 @@
-<?php session_start()?>
+<?php date_default_timezone_set('Asia/Manila'); session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 <?php 
@@ -52,7 +52,7 @@
                         Search
                     </button>
                     <button id="chatNextBtn"
-                    class="bg-[#395B64] hover:bg-[#2F4D55 text-white font-semibold py-2 px-4 rounded-lg text-sm cursor-pointer">
+                    class="bg-[#395B64] hover:bg-[#2F4D55] text-white font-semibold py-2 px-4 rounded-lg text-sm cursor-pointer">
                         Next
                     </button>
                 </div>
@@ -196,11 +196,11 @@
 
                 const starters = [
                     "How have you been feeling lately?",
-                    "What’s been on your mind today?",
+                    "What's been on your mind today?",
                     "How was your day emotionally?",
                     "Is there something you'd like to talk about today?",
                     "What emotions have been strongest for you recently?",
-                    "What’s been bothering you lately?",
+                    "What's been bothering you lately?",
                     "How are you feeling right now?"
                 ];
 

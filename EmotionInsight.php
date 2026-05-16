@@ -39,17 +39,6 @@
                     Understand emotional patterns and trends over time.
                 </p>
             </div>
-
-            <div class="flex items-center gap-3">
-                <input 
-                    type="date"
-                    class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#395B64]"
-                >
-
-                <button class="bg-[#395B64] hover:bg-[#2F4D55] text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
-                    Generate
-                </button>
-            </div>
         </div>
 
         <!-- Scrollable Content -->
