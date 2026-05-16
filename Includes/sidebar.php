@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Manila');
 $today = date('Y-m-d');
 include_once __DIR__ . "/../Classes/MessagesView.class.php";
 $messagesView = new MessagesView();
@@ -16,15 +17,6 @@ $messagesView = new MessagesView();
         <p class="text-xs text-gray-600 mt-1">
             Express yourself
         </p>
-        <!--
-        <h1 class="text-2xl font-bold text-gray-900">
-            Ennoia
-        </h1>
-
-        <p class="text-xs text-gray-600 mt-1">
-            Express yourself
-        </p>
-        -->
     </div>
 
     <!-- TODAY BUTTON -->
