@@ -20,4 +20,13 @@ class EmotionsView extends Emotions {
 
         return $emotions ?: [];
     }
+
+    /* =========================
+    GET SENTIMENT ANALYSIS THIS WEEK
+    ========================= */
+    public function SentimentAnalysisThisWeek($userid) {
+        $sentiments = $this->getSentimentAnalysis($userid);
+
+        return $sentiments ?: [];
+    }
 }

@@ -41,10 +41,12 @@ $messagesView = new MessagesView();
             class="block text-xs text-gray-400 px-3 py-1 whitespace-nowrap hover:text-gray-700">
                 Emotional Insights
             </a>
+            <!--
             <a href="./Goals&Tasks.php" 
             class="block text-xs text-gray-400 px-3 py-1 whitespace-nowrap hover:text-gray-700">
                 Goals & Tasks
             </a>
+            -->
         </div>
 
         <!-- RECENT CHATS -->

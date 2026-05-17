@@ -15,6 +15,7 @@
     $emotionView = new EmotionsView();
     $emotions = $emotionView->TopEmotionHistory($_SESSION['user_id']);
     $topemotion = $emotionView->TopEmotionThisWeek($_SESSION['user_id']);
+    $data = $emotionView->SentimentAnalysisThisWeek($_SESSION['user_id']);
 ?>
 
 <body class="h-screen bg-white overflow-hidden">
@@ -111,20 +112,53 @@
                 </div>
 
                 <!-- GRAPH PLACEHOLDER -->
-                <div class="h-80 rounded-2xl border border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+                <div class="relative h-80 w-full border border-gray-200 rounded-2xl bg-white p-5">
 
-                    <div class="text-center">
-                        <svg class="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3v18h18M18 17l-5-5-4 4-3-3"></path>
-                        </svg>
-
-                        <p class="text-sm text-gray-400">
-                            Emotion graph visualization here
-                        </p>
+                    <!-- Y Axis Labels -->
+                    <div class="absolute left-5 top-0 bottom-0 my-5 w-10 flex flex-col justify-between text-xs text-gray-400">
+                        <span>20</span>
+                        <span>10</span>
+                        <span>0</span>
                     </div>
 
+                    <!-- Graph Area -->
+                    <div id="graphArea" class="ml-10 h-full relative border-l border-b border-gray-200">
+
+                        <!-- Lines will be injected here -->
+                        <svg class="absolute inset-0 w-full h-full">
+                            <polyline id="positiveLine" fill="none" stroke="green" stroke-width="2"/>
+                            <polyline id="negativeLine" fill="none" stroke="red" stroke-width="2"/>
+                            <polyline id="neutralLine" fill="none" stroke="gray" stroke-width="2"/>
+                        </svg>
+
+                    </div>
+
+                    <!-- X Axis Labels -->
+                    <div id="xAxis" class="ml-10 mt-1 flex justify-between text-xs text-gray-400"></div>
+                </div>             
+
+                <!-- LEGEND -->
+                <div class="mt-4 flex items-center justify-center space-x-6 text-xs font-medium text-gray-500">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-600"></span>
+                        <span>Positive</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
+                        <span>Negative</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-gray-400"></span>
+                        <span>Neutral</span>
+                    </div>
                 </div>
+
+                <div class="mt-1 flex items-center justify-center space-x-6 text-xs font-medium text-gray-500">
+                    <p class="text-sm text-gray-400 mt-4">
+                        Note: Data show the number of sentiments based on the last 7 days of conversations.
+                    </p>
+                </div>
+
             </div>
 
             <!-- EMOTION RANKINGS -->
@@ -230,6 +264,140 @@
 
     </div>
 
+    <script>
+        (function() {
+            'use strict';
+ 
+            const rawData = <?php echo json_encode($data); ?>;
+            const daysOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+ 
+            // Initialize data arrays
+            let positive = Array(7).fill(null);
+            let negative = Array(7).fill(null);
+            let neutral = Array(7).fill(null);
+ 
+            /**
+             * Parse data from server and populate arrays
+             */
+            function parseData() {
+                rawData.forEach(row => {
+                    const cleanDay = row.day.trim().toLowerCase();
+                    const index = daysOrder.findIndex(d => d.toLowerCase() === cleanDay);
+ 
+                    if (index === -1) return;
+ 
+                    const p = Number(row.positive_count) || 0;
+                    const n = Number(row.negative_count) || 0;
+                    const ne = Number(row.neutral_count) || 0;
+ 
+                    // Skip days with all zeros
+                    if (p === 0 && n === 0 && ne === 0) {
+                        positive[index] = null;
+                        negative[index] = null;
+                        neutral[index] = null;
+                        return;
+                    }
+ 
+                    positive[index] = p;
+                    negative[index] = n;
+                    neutral[index] = ne;
+                });
+            }
+ 
+            /**
+             * Build continuous line segments, breaking where data is null
+             * Scaling is calculated directly against the chart Y-axis limit (50)
+             */
+            function buildSegments(arr, width, height) {
+                const segments = [];
+                let currentSegment = [];
+                const maxChartValue = 20; // Aligns perfectly with your Y-axis label
+
+                arr.forEach((value, i) => {
+                    if (value === null) {
+                        if (currentSegment.length > 0) {
+                            segments.push(currentSegment);
+                            currentSegment = [];
+                        }
+                        return;
+                    }
+ 
+                    // X position: spread 7 days across width (0 at Sunday, max at Saturday)
+                    const x = (i / 6) * width;
+ 
+                    // Y position: 0 value = bottom (height), maxChartValue = top (0)
+                    const y = height - (value / maxChartValue) * height;
+ 
+                    currentSegment.push(`${x},${y}`);
+                });
+ 
+                if (currentSegment.length > 0) {
+                    segments.push(currentSegment);
+                }
+ 
+                return segments;
+            }
+ 
+            /**
+             * Render all polylines to SVG
+             */
+            function renderGraph() {
+                const graphArea = document.getElementById("graphArea");
+                const width = graphArea.getBoundingClientRect().width;
+                const height = graphArea.getBoundingClientRect().height;
+ 
+                const svg = document.querySelector("svg");
+                svg.innerHTML = "";
+ 
+                /**
+                 * Draw lines for a single emotion
+                 */
+                function drawLine(arr, color) {
+                    const segments = buildSegments(arr, width, height);
+ 
+                    segments.forEach(points => {
+                        const polyline = document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "polyline"
+                        );
+ 
+                        polyline.setAttribute("points", points.join(" "));
+                        polyline.setAttribute("fill", "none");
+                        polyline.setAttribute("stroke", color);
+                        polyline.setAttribute("stroke-width", "2");
+                        polyline.setAttribute("stroke-linecap", "round");
+                        polyline.setAttribute("stroke-linejoin", "round");
+ 
+                        svg.appendChild(polyline);
+                    });
+                }
+ 
+                // Draw all emotion lines
+                drawLine(positive, "green");
+                drawLine(negative, "red");
+                drawLine(neutral, "gray");
+ 
+                // Update X-axis labels
+                document.getElementById("xAxis").innerHTML = daysOrder
+                    .map(d => `<span>${d.slice(0, 3)}</span>`)
+                    .join("");
+            }
+ 
+            /**
+             * Initialize on page load
+             */
+            function init() {
+                parseData();
+                // Removed erratic individual normalization functions
+                renderGraph();
+            }
+ 
+            // Wait for page to load before rendering
+            window.addEventListener("load", init);
+ 
+        })();
+    </script>
+    
 </div>
 
 </body>
